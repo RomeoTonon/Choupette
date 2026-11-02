@@ -1,0 +1,1969 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#86bdff">
+<title>Vol NR 2909</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:ital,wght@0,400;0,600;0,800;1,400&family=Space+Mono:wght@400;700&family=Caveat:wght@600&display=swap">
+<style>
+/* Layout: one narrow column of "paper" documents (boarding pass, logbook, VFR chart, ATC strip) floating on a sky that goes from day to sunset to night as the story scrolls; a fixed cockpit HUD on top. Single deliberate look, independent of host theme. */
+:root{
+  color-scheme: light;
+  --ink:#16213e;
+  --ink-soft:#4f5a7a;
+  --paper:#fffdf8;
+  --paper-2:#f3f6fc;
+  --line:#dfe6f2;
+  --kiss:#ff4f79;
+  --kiss-soft:#ffe3ea;
+  --amber:#ffb238;
+  --green:#14995f;
+  --sea:#cfe3f7;
+  --land:#f6f1e4;
+  --sky-day-a:#5fb0ff; --sky-day-b:#cfe8ff;
+  --sky-night-a:#050b24; --sky-night-b:#16245a;
+  --f-display:"Bagel Fat One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-mono:"Space Mono",ui-monospace,Consolas,monospace;
+  --f-hand:"Caveat","Segoe Script",cursive;
+  --r:18px;
+  --hud:56px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hud) + 12px)}
+html,body{background:var(--sky-day-a)}
+body{font-family:var(--f-body);color:var(--ink);font-size:16px;line-height:1.55;overflow-x:hidden;padding-inline:16px;padding-block:0}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+
+/* ---------- sky ---------- */
+.sky{position:fixed;inset:0;pointer-events:none}
+.sky.day{z-index:0;background:linear-gradient(180deg,var(--sky-day-a),var(--sky-day-b))}
+.sky.dusk{z-index:0;opacity:0;background:linear-gradient(180deg,#3b3f8f 0%,#c0587a 55%,#ff8a6b 100%)}
+.sky.night{z-index:0;opacity:0;background:linear-gradient(180deg,var(--sky-night-a),var(--sky-night-b))}
+.star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.85;animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.2}}
+.cloud{position:fixed;z-index:0;pointer-events:none;width:140px;height:60px}
+.cloud i{position:absolute;background:#fff;border-radius:50%}
+
+/* ---------- HUD ---------- */
+.hud{position:fixed;left:0;right:0;top:0;z-index:40;padding-top:env(safe-area-inset-top,0px);background:rgba(22,33,62,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff}
+.hud-in{max-width:1100px;margin:0 auto;height:var(--hud);display:flex;align-items:center;gap:10px;padding-inline:12px}
+.hud-brand{font-family:var(--f-mono);font-weight:700;font-size:.8rem;letter-spacing:.1em;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.hud-brand b{color:var(--amber)}
+.hud-nav{flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;display:flex;gap:4px}
+.hud-nav::-webkit-scrollbar{display:none}
+.hud-nav a{color:#cfd8ee;text-decoration:none;font-size:.78rem;font-weight:600;white-space:nowrap;padding:6px 10px;border-radius:999px}
+.hud-nav a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.hud-nav a.on{background:var(--kiss);color:#fff}
+.hud-btn{background:rgba(255,255,255,.1);border:0;color:#fff;border-radius:999px;height:34px;min-width:34px;padding:0 10px;cursor:pointer;font-size:1rem}
+.hud-btn:hover{background:rgba(255,255,255,.2)}
+.hud-progress{height:3px;background:rgba(255,255,255,.12);position:relative}
+.hud-progress i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--amber),var(--kiss))}
+.hud-progress svg{position:absolute;top:-8px;width:18px;height:18px;margin-left:-9px;color:#fff;left:0}
+
+main{position:relative;z-index:1;max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:64px;padding-block:calc(var(--hud) + 34px) 90px}
+.chapter{display:flex;flex-direction:column;gap:22px}
+.ch-head{color:#fff;text-shadow:0 2px 0 var(--ink),0 0 14px rgba(22,33,62,.45)}
+.ch-head .eyebrow{color:#fff}
+.ch-head h2{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--kiss);margin:0 0 6px}
+h2{font-family:var(--f-display);font-weight:400;font-size:clamp(2rem,7vw,2.9rem);line-height:1.02;margin:0 0 10px;text-wrap:balance}
+h3{text-wrap:balance}
+.lead{margin:0;color:var(--ink-soft);max-width:62ch}
+.ch-head .lead{color:#fff;opacity:.95;text-shadow:0 1px 0 var(--ink),0 0 10px rgba(22,33,62,.6)}
+.paper{background:var(--paper);border-radius:var(--r);box-shadow:0 14px 40px rgba(5,11,36,.22);padding:24px 22px;min-width:0}
+.paper > h3{font-family:var(--f-display);font-weight:400;font-size:1.6rem;line-height:1.1;margin:0 0 8px}
+.mono{font-family:var(--f-mono)}
+.hand{font-family:var(--f-hand);font-size:1.5rem;line-height:1.2;color:var(--kiss)}
+
+/* buttons */
+.btn{font:800 1rem var(--f-body);border:0;border-radius:999px;padding:.8em 1.3em;cursor:pointer;background:var(--ink);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.45);transition:transform .12s,box-shadow .12s,opacity .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.45)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn.pink{background:var(--kiss)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.btn.small{font-size:.85rem;padding:.55em 1em}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* ---------- hero ---------- */
+.hello{text-align:center;color:#fff}
+.hello h1{font-family:var(--f-display);font-weight:400;font-size:clamp(3.6rem,15vw,6.8rem);line-height:.95;margin:0;text-shadow:0 4px 0 var(--ink),0 10px 30px rgba(22,33,62,.35)}
+.hello p{font-family:var(--f-hand);font-size:clamp(1.5rem,5.4vw,2.1rem);margin:.4rem 0 0;text-shadow:0 2px 0 rgba(22,33,62,.55)}
+.ticker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:18px}
+.tick{background:rgba(22,33,62,.88);color:#fff;border-radius:12px;padding:10px 6px;text-align:center}
+.tick strong{display:block;font-family:var(--f-mono);font-size:clamp(1.2rem,5vw,1.7rem);color:var(--amber);font-variant-numeric:tabular-nums;line-height:1.1}
+.tick span{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.ticker-cap{text-align:center;color:#fff;font-size:.88rem;margin:8px 0 0;text-shadow:0 1px 0 var(--ink)}
+
+/* checklist */
+.checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0 16px;padding:0;list-style:none}
+.checklist label{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:2px dashed var(--line);cursor:pointer;font-weight:600;transition:border-color .2s,background .2s;min-width:0}
+.checklist input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--ink);display:grid;place-items:center;flex:none;margin:0;cursor:pointer}
+.checklist input:checked{background:var(--green);border-color:var(--green)}
+.checklist input:checked::after{content:"✓";color:#fff;font-weight:900;font-size:.9rem}
+.checklist label:has(input:checked){border-style:solid;border-color:var(--green);background:#e6f7ef}
+.engine{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.prop{width:56px;height:56px;flex:none}
+.prop g{transform-origin:28px 28px}
+.prop.spin g{animation:spin .12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.engine-msg{font-family:var(--f-mono);font-size:.85rem;color:var(--ink-soft);margin:0;min-width:0;flex:1}
+
+/* boarding pass */
+.pass{display:grid;grid-template-columns:1fr 150px;background:var(--paper);border-radius:var(--r);box-shadow:0 18px 50px rgba(22,33,62,.28);position:relative}
+.pass-main{padding:22px 22px 18px;min-width:0}
+.pass-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.pass-top b{color:var(--kiss);font-size:.9rem}
+.route{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:14px 0 16px}
+.route .code{font-family:var(--f-display);font-size:clamp(2.2rem,9vw,3.2rem);line-height:1}
+.route .city{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.route .to{text-align:right}
+.route svg{width:52px;height:24px;color:var(--kiss)}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 14px;border-top:2px dashed var(--line);padding-top:14px}
+.f small{display:block;font-family:var(--f-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.f span{font-weight:800;font-size:.95rem;line-height:1.25;display:block}
+.stub{border-left:2px dashed var(--line);padding:22px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;background:var(--paper);border-radius:0 var(--r) var(--r) 0;transform-origin:left center;transition:transform .9s cubic-bezier(.5,-0.3,.6,1.3),opacity .9s}
+.barcode{height:54px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 7px,transparent 7px 9px,var(--ink) 9px 10px,transparent 10px 13px)}
+.pass.torn .stub{transform:translate(30px,40px) rotate(14deg);opacity:0}
+.stamp{position:absolute;right:170px;top:16px;font-family:var(--f-mono);font-weight:700;color:var(--green);border:3px solid var(--green);border-radius:8px;padding:4px 10px;transform:rotate(-10deg) scale(1.6);opacity:0;transition:transform .35s cubic-bezier(.3,1.6,.5,1),opacity .2s;pointer-events:none;letter-spacing:.08em;background:rgba(255,253,248,.85)}
+.stamp.on{opacity:1;transform:rotate(-10deg) scale(1)}
+.metar{font-family:var(--f-mono);font-size:.74rem;color:var(--ink-soft);margin:0;line-height:1.5;min-width:0;overflow-wrap:anywhere;flex:1}
+.metar b{color:var(--kiss)}
+.board{margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+/* ---------- black box ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stat{background:var(--ink);color:#fff;border-radius:12px;padding:12px 10px;min-width:0}
+.stat strong{display:block;font-family:var(--f-mono);font-size:clamp(1.05rem,4.2vw,1.4rem);font-variant-numeric:tabular-nums;color:var(--amber);line-height:1.15}
+.stat span{font-size:.78rem;line-height:1.3;display:block;margin-top:4px;opacity:.92}
+.chart{position:relative;margin-top:12px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--f-mono);font-size:10px;fill:var(--ink-soft)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:8px;padding:6px 9px;font-size:.78rem;line-height:1.3;white-space:nowrap;transform:translate(-50%,-110%);opacity:0;transition:opacity .12s;z-index:2}
+.tip b{color:var(--amber);font-family:var(--f-mono)}
+.key{list-style:none;padding:0;margin:12px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;font-size:.88rem}
+.key li{display:flex;gap:8px;align-items:baseline;min-width:0}
+.key b{flex:none;width:20px;height:20px;border-radius:50%;background:var(--kiss);color:#fff;font:700 .7rem var(--f-mono);display:grid;place-items:center}
+.split{margin-top:10px}
+.split-bar{display:flex;height:34px;border-radius:8px;overflow:hidden;gap:2px;background:var(--paper)}
+.split-bar div{display:flex;align-items:center;padding:0 10px;color:#fff;font:700 .8rem var(--f-mono);white-space:nowrap;min-width:0}
+.split-bar .r{background:var(--ink)}
+.split-bar .n{background:var(--kiss);justify-content:flex-end}
+.split-cap{display:flex;justify-content:space-between;font-size:.82rem;color:var(--ink-soft);margin-top:4px;gap:8px}
+.emo{display:grid;gap:6px;margin-top:10px}
+.emo-row{display:grid;grid-template-columns:28px 1fr 60px;align-items:center;gap:8px}
+.emo-row span:first-child{font-size:1.2rem;text-align:center}
+.emo-row i{display:block;height:14px;border-radius:0 4px 4px 0;background:var(--kiss);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.emo-row span:last-child{font:700 .78rem var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+
+/* ---------- logbook ---------- */
+.log{position:relative;padding-left:46px}
+.log-line{position:absolute;left:16px;top:0;bottom:0;border-left:3px dashed rgba(255,255,255,.85);filter:drop-shadow(1px 0 0 rgba(22,33,62,.35))}
+.log-plane{position:absolute;left:3px;top:0;width:30px;height:30px;color:#fff;filter:drop-shadow(0 2px 3px rgba(5,11,36,.6));z-index:2}
+.entries{display:flex;flex-direction:column;gap:24px}
+.month{font-family:var(--f-display);font-size:clamp(2.2rem,9vw,3.4rem);color:#fff;line-height:1;margin:18px 0 -6px;text-shadow:0 3px 0 var(--ink);position:relative}
+.month::before{content:"";position:absolute;left:-39px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:4px;background:#fff;transform:rotate(45deg);box-shadow:0 0 0 3px var(--ink)}
+.entry{position:relative}
+.entry::before{content:"";position:absolute;left:-37px;top:22px;width:14px;height:14px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px rgba(255,178,56,.35)}
+.entry.big::before{background:var(--kiss);box-shadow:0 0 0 5px rgba(255,79,121,.4)}
+.lrow{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.lrow b{color:var(--ink)}
+.entry h3{font-family:var(--f-display);font-weight:400;font-size:1.55rem;line-height:1.1;margin:0 0 8px}
+.entry p{margin:0 0 10px}
+.photos{margin:14px 0 6px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.photos figure{margin:0;background:#fff;padding:8px 8px 4px;border-radius:6px;box-shadow:0 6px 16px rgba(22,33,62,.2);transform:rotate(var(--rot,-1.5deg));transition:transform .25s;cursor:zoom-in}
+.photos figure:hover{transform:rotate(0) scale(1.03)}
+.photos img{display:block;width:100%;max-width:100%;height:auto;border-radius:3px;aspect-ratio:4/3;object-fit:cover;background:var(--paper-2)}
+.photos img.tall{aspect-ratio:3/4}
+.photos figcaption{font-family:var(--f-hand);font-size:1.25rem;text-align:center;line-height:1.2;padding:4px 0 2px}
+.chip{font:700 .85rem var(--f-body);border:0;cursor:pointer;background:#e9f0fb;color:var(--ink);padding:.55em 1em;border-radius:999px;margin-top:4px}
+.chip[aria-expanded="true"]{background:var(--ink);color:#fff}
+.chat{display:flex;flex-direction:column;gap:6px;margin-top:12px;padding:12px;border-radius:12px;background:#efe7dd;background-image:radial-gradient(rgba(0,0,0,.04) 1px,transparent 1px);background-size:10px 10px}
+.msg{max-width:85%;padding:7px 10px 5px;border-radius:10px;font-size:.95rem;line-height:1.35;box-shadow:0 1px 1px rgba(0,0,0,.1);overflow-wrap:anywhere;color:#111b21}
+.msg.r{align-self:flex-end;background:#d9fdd3;border-top-right-radius:2px}
+.msg.n{align-self:flex-start;background:#fff;border-top-left-radius:2px}
+.msg small{display:block;text-align:right;font-family:var(--f-mono);font-size:.62rem;color:#667;margin-top:2px}
+.msg em{font-style:normal;font-weight:800;font-size:.72rem;display:block;color:var(--kiss)}
+.msg.r em{color:#0b7a5a}
+.pop{animation:pop .35s ease-out}
+@keyframes pop{from{transform:translateY(-6px);opacity:0}}
+
+/* lightbox */
+.lightbox{position:fixed;inset:0;z-index:60;background:rgba(5,11,36,.9);display:grid;place-items:center;padding:24px}
+.lightbox img{max-width:100%;max-height:80vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lightbox p{color:#fff;font-family:var(--f-hand);font-size:1.6rem;margin:10px 0 0;text-align:center}
+.lightbox button{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px}
+
+/* ---------- map ---------- */
+.map-wrap{position:relative;border-radius:12px;overflow:hidden;border:2px solid var(--ink);background:var(--sea)}
+.map-wrap svg{display:block;width:100%;height:auto}
+.map-legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.8rem;color:var(--ink-soft);margin-top:10px}
+.map-legend span{display:inline-flex;align-items:center;gap:6px}
+.map-legend i{display:inline-block;width:22px;height:0;border-top:3px solid var(--kiss)}
+.map-legend i.dash{border-top:3px dashed var(--ink-soft)}
+.map-legend i.dot{width:12px;height:12px;border:0;border-radius:50%;background:var(--amber);box-shadow:0 0 0 2px var(--ink)}
+.map-info{margin-top:12px;padding:14px 16px;border-radius:12px;background:var(--paper-2);min-height:84px}
+.map-info h4{margin:0 0 4px;font-family:var(--f-display);font-weight:400;font-size:1.3rem}
+.map-info p{margin:0}
+.pin{cursor:pointer}
+.pin:focus{outline:none}
+.pin:focus-visible circle.hit{stroke:var(--amber);stroke-width:4}
+
+/* ---------- games ---------- */
+.game-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.game-tabs button{font:700 .85rem var(--f-body);border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:.5em 1em;cursor:pointer}
+.game-tabs button[aria-selected="true"]{background:var(--ink);color:#fff}
+.game-panel{margin-top:16px}
+.game-wrap{position:relative;border-radius:14px;overflow:hidden;background:#0b1530;touch-action:none;user-select:none;-webkit-user-select:none}
+#game{display:block;width:100%;height:280px}
+.verdict{font-weight:800;min-height:1.6em;margin:12px 0 0;font-size:1.05rem}
+.verdict small{display:block;font-weight:400;color:var(--ink-soft);font-size:.9rem}
+.small-note{font-family:var(--f-mono);font-size:.78rem;color:var(--ink-soft)}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:#fff;color:var(--ink);font:700 .78rem var(--f-body);padding:.45em .9em;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+.memory{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.mcard{aspect-ratio:1;border:0;padding:0;background:transparent;perspective:600px;cursor:pointer;min-width:0}
+.mcard .in{position:relative;display:block;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.mcard.up .in,.mcard.done .in{transform:rotateY(180deg)}
+.mcard .face{position:absolute;inset:0;border-radius:10px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.mcard .back{background:var(--ink);display:grid;place-items:center;color:var(--amber);font:400 clamp(1rem,5vw,1.6rem) var(--f-display);background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 8px,transparent 8px 16px)}
+.mcard .front{transform:rotateY(180deg);background:#fff}
+.mcard .front img{width:100%;height:100%;object-fit:cover;display:block}
+.mcard.done .front{box-shadow:inset 0 0 0 4px var(--green)}
+
+.notam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.hole{aspect-ratio:1.5;border-radius:12px;background:var(--paper-2);border:2px dashed var(--line);position:relative;overflow:hidden;padding:0;cursor:pointer;min-width:0}
+.hole .pop-item{position:absolute;inset:6px;border-radius:8px;display:grid;place-items:center;text-align:center;font:700 clamp(.58rem,2.4vw,.78rem)/1.15 var(--f-mono);padding:4px;transform:translateY(110%);transition:transform .15s}
+.hole.up .pop-item{transform:none}
+.hole .notam{background:#fff3c4;border:2px solid #c48a00;color:#5a3d00}
+.hole .heartc{background:var(--kiss-soft);border:2px solid var(--kiss);color:var(--kiss);font-size:1.6rem}
+.hole.hit .pop-item{transform:scale(.6);opacity:0;transition:transform .2s,opacity .2s}
+.nhud{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:12px;font-family:var(--f-mono);font-size:.9rem}
+.nhud b{color:var(--kiss);font-size:1.2rem}
+
+.nato{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.nato-word{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 12px;border-radius:12px;background:var(--paper-2)}
+.nato-codes{font-family:var(--f-mono);font-size:.82rem;flex:1;min-width:0;line-height:1.5}
+.nato-word input{font:700 1.1rem var(--f-mono);text-transform:uppercase;width:150px;max-width:100%;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.nato-word.ok{background:#e3f7ee}
+.nato-word.ok input{border-color:var(--green);color:var(--green)}
+.nato-final{display:none;text-align:center;padding:16px;border-radius:12px;background:var(--ink);color:#fff}
+.nato-final.show{display:block;animation:pop .5s ease-out}
+.nato-final strong{display:block;font-family:var(--f-display);font-weight:400;font-size:clamp(1.8rem,7vw,2.6rem);color:var(--amber);line-height:1.1}
+
+.scratch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.ticket{position:relative;border-radius:12px;min-height:130px;background:#fff;border:2px solid var(--ink);overflow:hidden;min-width:0}
+.ticket .under{padding:14px 14px 12px;display:flex;flex-direction:column;gap:4px;height:100%;background:repeating-linear-gradient(135deg,#fff 0 12px,#fff5f7 12px 24px)}
+.ticket .under small{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.ticket .under strong{font-size:1.02rem;line-height:1.25}
+.ticket .under span{font-family:var(--f-hand);font-size:1.15rem;color:var(--kiss);line-height:1.1;margin-top:auto}
+.ticket canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;transition:opacity .6s}
+.ticket.clear canvas{opacity:0;pointer-events:none}
+
+/* ---------- radio ---------- */
+.radio{background:#1d2742;border-radius:18px;padding:18px;color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.08),0 14px 40px rgba(5,11,36,.3)}
+.radio-top{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.freq{font-family:var(--f-mono);font-size:clamp(1.6rem,7vw,2.3rem);color:#7dffb0;background:#06110b;padding:4px 14px;border-radius:8px;letter-spacing:.06em;text-shadow:0 0 8px rgba(125,255,176,.6);font-variant-numeric:tabular-nums}
+.freq small{font-size:.8rem;opacity:.7;margin-left:6px}
+.radio .seg{border-color:#fff}
+.radio .seg button{background:transparent;color:#fff}
+.radio .seg button[aria-pressed="true"]{background:#fff;color:#1d2742}
+.screen{margin-top:14px;background:#0c1428;border-radius:12px;padding:18px;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:10px;position:relative;overflow:hidden}
+.screen.static::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 3px);animation:noise .15s steps(2) 2}
+@keyframes noise{50%{transform:translateY(2px)}}
+.quote{font-size:clamp(1.1rem,4.5vw,1.4rem);line-height:1.35;font-weight:600;margin:0}
+.quote-meta{font-family:var(--f-mono);font-size:.75rem;color:#9fb0d6;margin:0}
+.quote-meta b{color:var(--amber)}
+.knobs{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.knob{width:56px;height:56px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#4b5a86,#1a2240);box-shadow:0 4px 0 #0b1020,inset 0 0 0 3px #59699a;color:#fff;font-size:1.2rem;cursor:pointer;transition:transform .2s}
+.knob:active{transform:rotate(25deg)}
+.knob.big{width:64px;height:64px}
+
+/* ---------- lexicon ---------- */
+.lex{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lcard{border:0;padding:0;background:transparent;perspective:800px;min-height:150px;cursor:pointer;text-align:left;min-width:0}
+.lcard .in{position:relative;display:block;width:100%;height:100%;min-height:150px;transition:transform .5s;transform-style:preserve-3d}
+.lcard.flip .in{transform:rotateY(180deg)}
+.lcard .face{position:absolute;inset:0;border-radius:14px;padding:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.lcard .fr{background:var(--paper);box-shadow:0 8px 22px rgba(5,11,36,.2)}
+.lcard .fr strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem;line-height:1.1;color:var(--ink)}
+.lcard .fr small{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--kiss)}
+.lcard .bk{background:var(--ink);color:#fff;transform:rotateY(180deg);font-size:.88rem;line-height:1.4}
+
+/* ---------- reasons ---------- */
+.deck{position:relative;min-height:250px;display:grid;place-items:center}
+.rcard{width:100%;max-width:520px;background:var(--paper);border-radius:20px;padding:30px 26px;box-shadow:0 20px 50px rgba(5,11,36,.3);text-align:center;position:relative}
+.rcard::before,.rcard::after{content:"";position:absolute;inset:0;border-radius:20px;background:var(--paper);z-index:-1;box-shadow:0 10px 30px rgba(5,11,36,.2)}
+.rcard::before{transform:rotate(-3deg) translateY(6px)}
+.rcard::after{transform:rotate(2.5deg) translateY(10px);z-index:-2}
+.rnum{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.14em;color:var(--kiss);text-transform:uppercase}
+.rtext{font-family:var(--f-hand);font-size:clamp(1.7rem,6.5vw,2.3rem);line-height:1.15;margin:10px 0 6px;color:var(--ink)}
+.rsrc{font-size:.85rem;color:var(--ink-soft);margin:0}
+.rnav{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* ---------- bucket list ---------- */
+.bucket{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.bucket li{min-width:0}
+.bucket label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--paper-2);cursor:pointer;line-height:1.3}
+.bucket input{appearance:none;-webkit-appearance:none;flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--ink);margin:0;display:grid;place-items:center;cursor:pointer}
+.bucket input:checked{background:var(--kiss);border-color:var(--kiss)}
+.bucket input:checked::after{content:"♥";color:#fff;font-size:.75rem}
+.bucket label:has(input:checked) span{text-decoration:line-through;text-decoration-color:var(--kiss);text-decoration-thickness:2px}
+.bucket small{display:block;font-family:var(--f-mono);font-size:.66rem;color:var(--ink-soft);text-decoration:none}
+.done-list{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.done-list li{font-size:.85rem;padding:6px 12px;border-radius:999px;background:#e6f7ef;color:#0d6e45;font-weight:700}
+.add-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.add-row input{flex:1;min-width:0;font:600 1rem var(--f-body);padding:10px 12px;border-radius:12px;border:2px solid var(--line);color:var(--ink);background:#fff}
+
+/* ---------- quiz ---------- */
+.q{margin-top:6px}
+.q-count{font-family:var(--f-mono);font-size:.75rem;color:var(--ink-soft);letter-spacing:.08em}
+.q h3{font-size:1.2rem;margin:4px 0 12px;line-height:1.3}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{font:600 .98rem var(--f-body);text-align:left;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;min-width:0}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.ok{border-color:var(--green);background:#e3f7ee}
+.opt.ko{border-color:var(--kiss);background:#ffe8ee}
+.opt:disabled{cursor:default}
+.fb{margin:12px 0 0;min-height:1.4em;font-weight:600}
+.progress{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin:12px 0}
+.progress i{display:block;height:100%;width:0;background:var(--kiss);transition:width .3s}
+.licence{margin-top:6px;border:2px solid var(--ink);border-radius:12px;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:repeating-linear-gradient(135deg,#fff 0 12px,#f4f7fd 12px 24px)}
+.licence .seal{width:72px;height:72px;border-radius:50%;background:var(--kiss);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-size:1.4rem;transform:rotate(-12deg)}
+.licence p{margin:0}
+
+/* ---------- clearance ---------- */
+.strip{font-family:var(--f-mono);background:#fff7d6;border:2px solid var(--ink);border-left:12px solid var(--amber);border-radius:6px;padding:16px;font-size:.92rem;line-height:1.65;overflow-wrap:anywhere}
+.strip .who{font-size:.7rem;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase}
+.answer{position:relative;min-height:160px;margin-top:18px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+#no{transition:left .25s,top .25s}
+.letter{display:none;margin-top:18px;padding:22px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);background-image:repeating-linear-gradient(transparent 0 33px,#e6edf8 33px 34px)}
+.letter.show{display:block;animation:pop .5s ease-out}
+.letter p{font-family:var(--f-hand);font-size:1.6rem;line-height:34px;margin:0 0 34px;color:var(--ink)}
+.letter p:last-child{margin:0}
+.reply{margin-top:18px;display:none}
+.reply.show{display:block}
+.reply textarea{width:100%;min-height:110px;font:600 1rem var(--f-body);padding:12px;border-radius:12px;border:2px solid var(--line);resize:vertical;color:var(--ink);background:#fff}
+
+/* toasts & floaters */
+.heart{position:fixed;pointer-events:none;z-index:70;font-size:22px;will-change:transform,opacity;left:0;top:0}
+.toast{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;max-width:min(360px,calc(100vw - 32px));background:var(--paper);color:var(--ink);border-radius:16px;padding:14px 16px;box-shadow:0 16px 40px rgba(5,11,36,.4);border:2px solid var(--ink);animation:slideup .4s cubic-bezier(.3,1.4,.5,1)}
+@keyframes slideup{from{transform:translateY(120%)}}
+.toast p{margin:0 0 10px}
+.toast .who{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--kiss);margin-bottom:4px}
+footer{text-align:center;color:#fff;font-family:var(--f-mono);font-size:.75rem;opacity:.9;padding-bottom:20px;line-height:1.7}
+
+@media (max-width:640px){
+  .lex{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid2{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  :root{--hud:52px}
+  .hud-brand span{display:none}
+  .pass{grid-template-columns:1fr}
+  .stub{border-left:0;border-top:2px dashed var(--line);border-radius:0 0 var(--r) var(--r);flex-direction:row;align-items:center;padding:14px 22px}
+  .barcode{flex:1;height:40px}
+  .stamp{right:16px;top:auto;bottom:90px}
+  .fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ticker{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .checklist,.opts,.bucket,.key{grid-template-columns:1fr}
+  .scratch{grid-template-columns:1fr}
+  .paper{padding:20px 16px}
+  .log{padding-left:36px}
+  .log-line{left:11px}
+  .log-plane{left:-2px}
+  .entry::before{left:-31px}
+  .month::before{left:-33px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ================= v3 : plus mignon ================= */
+:root{--sky-day-a:#86bdff;--sky-day-b:#ffd3e4;--blush:#ffe6ef;--rose:#ff8fb1}
+html,body{background:var(--sky-day-a)}
+.paper{background:#fffafc;border:2px solid #ffe0ea}
+.btn{box-shadow:0 4px 0 rgba(22,33,62,.45)}
+.btn.pink{box-shadow:0 4px 0 #c2305e}
+.btn.pink:active{box-shadow:0 1px 0 #c2305e}
+.chip{background:var(--blush);color:#a3214a}
+.chip[aria-expanded="true"]{background:var(--kiss);color:#fff}
+.chat{background:#fff4f7;background-image:radial-gradient(rgba(255,79,121,.09) 1.2px,transparent 1.2px);background-size:12px 12px}
+.msg.r{background:#ffe1ec}
+.msg.r em{color:#c2305e}
+.msg.n em{color:#1f6fd1}
+.entry::before{content:"💗";background:none!important;box-shadow:none!important;width:auto;height:auto;font-size:17px;line-height:1;left:-41px;top:18px}
+.entry.big::before{content:"💖";font-size:22px;left:-43px}
+.month::before{background:var(--kiss);border-radius:50% 50% 4px 50%}
+.photos figure{position:relative}
+.photos figure::before{content:"";position:absolute;top:-9px;left:50%;width:62px;height:18px;margin-left:-31px;background:rgba(255,170,198,.78);transform:rotate(-4deg);border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.photos figure:nth-child(even)::before{background:rgba(160,205,255,.8);transform:rotate(5deg)}
+.lcard .bk{background:linear-gradient(140deg,#e0457a,#b82a57)}
+.lcard .fr{border:2px solid #ffe0ea}
+.tick{background:rgba(22,33,62,.82);box-shadow:0 0 0 2px rgba(255,214,228,.6)}
+.hand{color:#e0457a}
+
+/* doudou hero */
+.doudou-hi{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin-bottom:6px}
+.doudou-hi .bear{font-size:2.6rem;display:inline-block;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 4px 0 rgba(22,33,62,.35))}
+.doudou-hi .bubble{font-family:var(--f-hand);font-size:1.3rem;background:#fff;color:var(--kiss);padding:4px 12px;border-radius:16px 16px 4px 16px;box-shadow:0 4px 0 rgba(22,33,62,.25);text-shadow:none;margin-bottom:28px}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-6deg)}}
+
+/* floating hearts */
+.bgh-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bgh{position:absolute;bottom:-40px;font-size:var(--s);opacity:0;animation:rise var(--d) linear var(--dl) infinite}
+@keyframes rise{0%{transform:translate(0,0) rotate(-10deg);opacity:0}10%{opacity:.55}85%{opacity:.35}100%{transform:translate(var(--x),-112vh) rotate(18deg);opacity:0}}
+
+/* nicknames */
+.nicks{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px 10px;padding:6px 0 4px}
+.nick{font-family:var(--f-display);font-weight:400;font-size:var(--s);line-height:1.05;border:0;cursor:pointer;padding:.45em .8em;border-radius:999px;transform:rotate(var(--r));transition:transform .2s;color:#fff;box-shadow:0 4px 0 rgba(22,33,62,.25)}
+.nick:hover{transform:rotate(0) scale(1.06)}
+.nick.r{background:#3b7be0}
+.nick.n{background:var(--kiss)}
+.nick.b{background:linear-gradient(120deg,#3b7be0,#ff4f79)}
+.nick[aria-pressed="true"]{outline:3px solid var(--amber);outline-offset:3px;transform:rotate(0) scale(1.06)}
+.nick-info{margin-top:16px;background:var(--blush);border-radius:14px;padding:14px 16px;min-height:96px}
+.nick-info strong{display:block;font-family:var(--f-display);font-weight:400;font-size:1.6rem;line-height:1.1;color:var(--kiss)}
+.nick-info .mono{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:4px 0 6px}
+.nick-info p{margin:0;font-size:1rem}
+.nick-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:.82rem;color:var(--ink-soft)}
+.nick-legend i{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:4px}
+.nick-legend i.r{background:#3b7be0}.nick-legend i.n{background:var(--kiss)}.nick-legend i.b{background:linear-gradient(120deg,#3b7be0,#ff4f79)}
+
+/* hugs */
+.hugbox{text-align:center}
+.hugbtn{width:150px;height:150px;border-radius:50%;border:0;cursor:pointer;background:radial-gradient(circle at 35% 30%,#fff,#ffd3e2 60%,#ff9dbb);box-shadow:0 10px 0 #e0457a,0 18px 40px rgba(224,69,122,.35);display:inline-grid;place-items:center;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .15s}
+.hugbtn span{font-size:4.6rem;line-height:1;pointer-events:none}
+.hugbtn.hold{transform:scale(.92);box-shadow:0 4px 0 #e0457a,0 10px 24px rgba(224,69,122,.35)}
+.hugbtn.squeeze span{animation:squeeze .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes squeeze{30%{transform:scale(1.25,.8)}60%{transform:scale(.9,1.15)}}
+.hugcount{margin-top:22px}
+.hugcount strong{display:block;font-family:var(--f-display);font-weight:400;font-size:clamp(2.4rem,10vw,3.4rem);line-height:1;color:var(--kiss);font-variant-numeric:tabular-nums}
+.hugcount span{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.hugbox .progress{margin:14px auto 0;max-width:420px}
+.hug-msg{margin:14px 0 0;min-height:1.4em}
+
+/* goodnight */
+.goodnight{text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.gn-msg{font-family:var(--f-hand);font-size:1.6rem;line-height:1.3;color:#fff;margin:0;text-shadow:0 2px 0 rgba(22,33,62,.6);max-width:30ch}
+.gn-msg small{display:block;font-size:1.1rem;opacity:.9}
+
+@media (prefers-reduced-motion:reduce){.doudou-hi .bear,.bgh{animation:none}}
+
+</style>
+<div class="sky day"></div>
+<div class="sky dusk" id="dusk"></div>
+<div class="sky night" id="night"></div>
+
+<header class="hud" aria-label="Navigation">
+  <div class="hud-in">
+    <div class="hud-brand"><button class="hud-btn" id="doudouBtn" aria-label="Doudou" title="Doudou">🧸</button><span><b>NR</b> 2909</span></div>
+    <nav class="hud-nav" id="hudNav">
+      <a href="#prevol">Pré-vol</a>
+      <a href="#boite">Boîte noire</a>
+      <a href="#carnet">Carnet</a>
+      <a href="#carte">Carte</a>
+      <a href="#hangar">Jeux</a>
+      <a href="#radio">Radio</a>
+      <a href="#surnoms">Surnoms</a>
+      <a href="#lexique">Lexique</a>
+      <a href="#raisons">Raisons</a>
+      <a href="#calins">Câlins</a>
+      <a href="#prochains">Prochains vols</a>
+      <a href="#ksa">Examen</a>
+      <a href="#clairance">Clairance</a>
+    </nav>
+    <button class="hud-btn" id="soundBtn" aria-pressed="false" aria-label="Activer le son" title="Son">🔇</button>
+  </div>
+  <div class="hud-progress" aria-hidden="true"><i id="hudBar"></i><svg id="hudPlane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" transform="rotate(90 12 12)"/></svg></div>
+</header>
+
+<main>
+
+<!-- ============ PRÉ-VOL ============ -->
+<section class="chapter" id="prevol" aria-labelledby="t-prevol">
+  <div class="hello">
+    <div class="doudou-hi" aria-hidden="true"><span class="bubble">je t’ai gardé une place</span><span class="bear">🧸</span></div>
+    <h1 id="t-prevol">Nell,</h1>
+    <p>mon ptit cœur, ceci est notre carnet de vol.</p>
+    <div class="ticker" aria-label="Temps depuis le premier je t'aime">
+      <div class="tick"><strong id="tkD">--</strong><span>jours</span></div>
+      <div class="tick"><strong id="tkH">--</strong><span>heures</span></div>
+      <div class="tick"><strong id="tkM">--</strong><span>minutes</span></div>
+      <div class="tick"><strong id="tkS">--</strong><span>secondes</span></div>
+    </div>
+    <p class="ticker-cap">depuis le premier « je t'aime » (30.09, 00h57). Le compteur tourne encore, et il ne s'arrêtera pas.</p>
+  </div>
+
+  <div class="paper">
+    <p class="eyebrow">Check-list avant vol · à faire dans l'ordre (ou pas)</p>
+    <h3>Avant de décoller</h3>
+    <p class="lead">Coche tout. Le moteur ne démarrera pas sans le doudou.</p>
+    <ul class="checklist" id="checklist">
+      <li><label><input type="checkbox" id="ck1"> Ceinture attachée</label></li>
+      <li><label><input type="checkbox" id="ck2"> Doudou à bord 🧸</label></li>
+      <li><label><input type="checkbox" id="ck3"> Le grand P briefé</label></li>
+      <li><label><input type="checkbox" id="ck4"> NOTAMs vérifiés (aucun ne nous arrêtera)</label></li>
+      <li><label><input type="checkbox" id="ck5"> Mode « hihi » activé</label></li>
+      <li><label><input type="checkbox" id="ck6"> Câlin magique effectué 🫂</label></li>
+    </ul>
+    <div class="engine">
+      <svg class="prop" id="prop" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26" fill="#eef2fa" stroke="#16213e" stroke-width="2"/><g><path d="M28 28 L24 5 Q28 1 32 5 Z" fill="#16213e"/><path d="M28 28 L32 51 Q28 55 24 51 Z" fill="#16213e"/><circle cx="28" cy="28" r="5" fill="#ff4f79"/></g></svg>
+      <button class="btn pink" id="startBtn" disabled>Mise en route</button>
+      <p class="engine-msg" id="engineMsg" aria-live="polite">En attente de la check-list (0/6).</p>
+    </div>
+  </div>
+
+  <div class="pass" id="pass" aria-label="Carte d'embarquement">
+    <div class="pass-main">
+      <div class="pass-top"><span>Carte d'embarquement</span><b>Vol NR 2909</b></div>
+      <div class="route">
+        <div><div class="code">EBCI</div><div class="city">Charleroi</div></div>
+        <svg viewBox="0 0 52 24" fill="none" aria-hidden="true"><path d="M2 12h40" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/><path d="M50 12 40 6v4l-10-1 0 6 10-1v4z" fill="currentColor"/></svg>
+        <div class="to"><div class="code">∞</div><div class="city">Partout, avec toi</div></div>
+      </div>
+      <div class="fields">
+        <div class="f"><small>Passagère</small><span>Nell</span></div>
+        <div class="f"><small>Commandant</small><span>Roméo (et parfois l'inverse)</span></div>
+        <div class="f"><small>Classe</small><span>Première, évidemment</span></div>
+        <div class="f"><small>Siège</small><span>À côté de moi</span></div>
+        <div class="f"><small>Bagage cabine</small><span>1 doudou autorisé</span></div>
+        <div class="f"><small>Équipage</small><span>Brussels Aviation School</span></div>
+      </div>
+      <div class="board">
+        <button class="btn pink" id="boardBtn">Embarquer ✈︎</button>
+        <p class="metar">METAR NELL 311800Z 00000KT CAVOK 19/10 Q1013 NOSIG <b>RMK FORTES RAFALES DE BISOUS</b></p>
+      </div>
+    </div>
+    <div class="stub">
+      <div class="f"><small>Porte</small><span>Mon cœur</span></div>
+      <div class="f"><small>Embarquement</small><span>Depuis le 20.06</span></div>
+      <div class="barcode" aria-hidden="true"></div>
+    </div>
+    <div class="stamp" id="stamp">EMBARQUÉE ✓</div>
+  </div>
+</section>
+
+<!-- ============ BOÎTE NOIRE ============ -->
+<section class="chapter" id="boite" aria-labelledby="t-boite">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 1 · lecture de la boîte noire</p>
+    <h2 id="t-boite">On a un peu parlé.</h2>
+    <p class="lead">J'ai fait analyser l'enregistreur de conversation, du 20 juin au 31 octobre. Le BEA est formel : aucune cause technique, juste deux pilotes qui ne savent pas s'arrêter.</p>
+  </div>
+  <div class="stats" id="stats">
+    <div class="stat"><strong data-count="33808">33 808</strong><span>messages</span></div>
+    <div class="stat"><strong data-count="61">61</strong><span>jours d'affilée sans silence (depuis le 1er sept.)</span></div>
+    <div class="stat"><strong data-count="92">92</strong><span>« je t'aime » écrits</span></div>
+    <div class="stat"><strong data-count="1657">1 657</strong><span>messages le 21.10, le record</span></div>
+    <div class="stat"><strong data-count="21670">21 670</strong><span>😂 et 🤣</span></div>
+    <div class="stat"><strong data-count="3518">3 518</strong><span>🥰</span></div>
+    <div class="stat"><strong data-count="308">308</strong><span>« hihi » rien que de toi</span></div>
+    <div class="stat"><strong>03:13</strong><span>notre message le plus tardif (25.08)</span></div>
+  </div>
+
+  <div class="paper">
+    <p class="eyebrow">Profil de montée · messages par jour</p>
+    <h3>Le décollage s'est fait en septembre</h3>
+    <p class="lead">Survole (ou touche) la courbe pour lire chaque jour. Les points roses sont nos moments clés.</p>
+    <div class="chart" id="climb"></div>
+    <ol class="key" id="climbKey"></ol>
+  </div>
+
+  <div class="grid2">
+    <div class="paper">
+      <p class="eyebrow">Heures de vol · messages par heure</p>
+      <h3>21 h, notre créneau</h3>
+      <div class="chart" id="hours"></div>
+      <p class="small-note">Entre 21 h et 22 h : 5 955 messages. Avant 6 h : presque rien, on dort quand même.</p>
+    </div>
+    <div class="paper">
+      <p class="eyebrow">Répartition des messages</p>
+      <h3>Qui parle le plus ?</h3>
+      <div class="split">
+        <div class="split-bar"><div class="r" style="flex:17267">Roméo</div><div class="n" style="flex:16541">Nell</div></div>
+        <div class="split-cap"><span>17 267 messages</span><span>16 541 messages</span></div>
+      </div>
+      <p class="small-note" style="margin-top:14px">Score des « je t'aime »</p>
+      <div class="split">
+        <div class="split-bar"><div class="r" style="flex:52">Roméo · 52</div><div class="n" style="flex:40">Nell · 40</div></div>
+      </div>
+      <p class="small-note" style="margin-top:10px">Je mène. Mais tu écris « bisou » 91 fois contre 30. Égalité.</p>
+    </div>
+  </div>
+
+  <div class="paper">
+    <p class="eyebrow">Top 8 des émojis</p>
+    <h3>Notre langue officielle</h3>
+    <div class="emo" id="emo"></div>
+  </div>
+</section>
+
+<!-- ============ CARNET ============ -->
+<section class="chapter log" id="carnet" aria-labelledby="t-carnet">
+  <div class="log-line" aria-hidden="true"></div>
+  <svg class="log-plane" id="logPlane" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" transform="rotate(180 12 12)"/></svg>
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 2 · carnet de vol</p>
+    <h2 id="t-carnet">Comment on en est arrivés là</h2>
+    <p class="lead">29 entrées, de la petite pilote à ce soir. Ouvre les pépites pour lire nos vrais messages, touche les photos pour les agrandir.</p>
+  </div>
+
+  <div class="entries">
+    <article class="entry paper">
+      <div class="lrow"><span><b>Avant</b></span><span>Archives</span><span>Élève pilote · très jeune</span></div>
+      <h3>Une pilote depuis toujours</h3>
+      <p>Avant même qu'on se connaisse, tu pilotais déjà. Blouson d'aviateur, lunettes de soleil, casque trop grand. Tu me les as envoyées en juillet, preuves à l'appui.</p>
+      <div class="photos">
+        <figure style="--rot:-2deg"><img class="tall" src="img/kid1.jpg" loading="lazy" alt="Nell enfant en blouson d'aviateur avec un casque"><figcaption>Top Gun, version mini</figcaption></figure>
+        <figure style="--rot:1.6deg"><img src="img/kid2.jpg" loading="lazy" alt="Nell enfant aux commandes d'un avion"><figcaption>Déjà aux commandes</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>J'ai retrouvé deux pépites en regardant des vieilles photos 🤣 je pilotais déjà en étant petite ;-)<small>24.07 · 17:14</small></div>
+        <div class="msg r"><em>Roméo</em>Déjà à Charleroi 😂😂<small>18:47</small></div>
+      </div>
+    </article>
+
+    <div class="month">Juin</div>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>20.06.26</b></span><span>EBCI → ???</span><span>DA40</span><span>Statut : reporté</span></div>
+      <h3>Opération NOTAMs</h3>
+      <p>Le vol devait fêter la fin de tes exams. Puis Colmar n'avait pas de fuel sans carte AirBP, Aschaffenburg non plus, Le Tréport avait un NOTAM, Lille un plafond à 300 ft, et le lendemain des CB partout. Toi, tu cherchais des destinations sur ChatGPT pendant que je menaçais mon iPad.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg r"><em>Roméo</em>No joke, j'en vois encore un j'fais un trou dans l'iPad<small>22:41</small></div>
+        <div class="msg n"><em>Nell</em>C'est plus des plans B qu'il faut mais des plans Z hein 😂<small>22:42</small></div>
+        <div class="msg r"><em>Roméo</em>Mais là je sens que je force et Foreflight ne veut pas de moi 😂<small>22:46</small></div>
+        <div class="msg n"><em>Nell</em>😂 c'est un signe de l'univers<small>22:46</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>26.06.26</b></span><span>EBCI → EHTX</span><span>DA40</span><span>40 °C au sol</span></div>
+      <h3>Texel, notre premier vol</h3>
+      <p>45 minutes de ceintures bien attachées sous la TMA d'Amsterdam, une GoPro chacun, un coup de soleil pour toi et un super landing à Charleroi (c'est toi qui l'as dit). Tu m'as vu checklister en silence. Et tu as dit la phrase qui allait tout lancer.</p>
+      <div class="photos">
+        <figure style="--rot:-2deg"><img src="img/texel.jpg" loading="lazy" alt="Selfie de Nell et Roméo dans le cockpit du DA40"><figcaption>Notre tout premier selfie</figcaption></figure>
+        <figure style="--rot:1.8deg"><img class="tall" src="img/texel2.jpg" loading="lazy" alt="Nell dans le cockpit au-dessus de la mer"><figcaption>Copilote officielle</figcaption></figure>
+        <figure style="--rot:-1deg"><img src="img/dunes.jpg" loading="lazy" alt="Chemin dans les dunes de Texel"><figcaption>Les dunes de Texel</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Encore merci beaucoup pour le vol 🤩🤪🛩️✈️ c'était super !<small>18:17</small></div>
+        <div class="msg n"><em>Nell</em>Et la prochaine fois c'est moi qui t'emmène<small>18:27</small></div>
+        <div class="msg n"><em>Nell</em>Et tu me laisses payer 😡🤯🤣<small>18:27</small></div>
+        <div class="msg r"><em>Roméo</em>Avec le plus grand des plaisirs 😆😆 On remet ça à quand tu veux<small>18:48</small></div>
+        <div class="msg n"><em>Nell</em>« Est-ce que tu es à l'ombre ? » quand on était à Texel… déjà :-)<small>16.09 · 22:00</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>30.06.26</b></span><span>Proclamation</span><span>Cadeau : 15 PDF</span></div>
+      <h3>Diplômée (et 15 livres Oxford)</h3>
+      <p>Le soir de ta proclamation, je t'envoie le cadeau le plus romantique du monde : les 15 livres ATPL Oxford en PDF. Toi, tu mets en photo de profil une photo que j'avais prise de toi.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg r"><em>Roméo</em>Et félicitations !<small>16:55</small></div>
+        <div class="msg r"><em>Roméo</em>15 au total du 2020<small>20:50</small></div>
+        <div class="msg n"><em>Nell</em>Merciiii beaucoup ! C'est trop top ! 😍<small>20:50</small></div>
+        <div class="msg n"><em>Nell</em>Tu as vu ? J'ai mis ta superbe photo en profil 🤣<small>21:11</small></div>
+      </div>
+    </article>
+
+    <div class="month">Juillet</div>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>01.07.26</b></span><span>Brussels Aviation School</span><span>Premier jour</span></div>
+      <h3>L'espionne de la BAS</h3>
+      <p>Ton nouveau job à la Brussels Aviation School commence. Premier rapport : Alexandra se souvient encore de moi. Deuxième rapport, plus inquiétant : tu as accès aux profils des élèves.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Alors ! Alexandra se souvient tjrs de toi 😆 elle a vu ma photo de profil et donc je lui ai dit d'où elle venait 🤣<small>08:54</small></div>
+        <div class="msg n"><em>Nell</em>Je sais stalker tous les profils ;-) fais attention hein je pourrais aller checker le tien 🤣😆<small>17:54</small></div>
+        <div class="msg n"><em>Nell</em>Je sais où t'habites et ton âge exact par contre 🫠<small>17:58</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>09.07.26</b></span><span>Pilot Lounge</span><span>Sol</span><span>Café : promis</span></div>
+      <h3>La stratégie du café</h3>
+      <p>Tu me poses mille questions sur l'ATPL et les prêts. En échange, tu me proposes un café au pilot lounge. Officiellement pour mes « bons conseils ».</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Pardon pour toutes les questions mais tu es le seul jeune pilote que je connais 🫠😆🤗<small>20:39</small></div>
+        <div class="msg r"><em>Roméo</em>Y a des infos que j'aurais aimé avoir aussi avant, alors si je peux les donner, je le fais 🤝<small>21:02</small></div>
+        <div class="msg n"><em>Nell</em>En échange de tous ces bons conseils, tu passes quand tu veux au pilot lounge pour chercher ton café<small>21:04</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>24.07.26</b></span><span>Veille de skill test</span><span>POH : p. 90/370</span></div>
+      <h3>Le stress du skill test</h3>
+      <p>Un POH de 370 pages lu à l'apéro, un examinateur de 78 ans qui trouve que tu as une petite voix, et toi qui as peur de rater. Mon conseil technique : ne pas rater la piste.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Imagine je rate dis… la honte, y'a quasi personne qui rate 🫣🫠😅<small>22:06</small></div>
+        <div class="msg r"><em>Roméo</em>Mais en vrai tant que tu ne rates pas la piste c'est dans la poche<small>22:10</small></div>
+        <div class="msg r"><em>Roméo</em>Et si tu veux que je vienne voler avec toi t'as intérêt à ne pas rater la piste 😂😂<small>22:11</small></div>
+        <div class="msg n"><em>Nell</em>😂😂 bah même si je rate la piste, je te dois quand même un vol et un resto 😉<small>22:12</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>25.07.26</b></span><span>Fréquence</span><span>Message codé</span><span>Reçu 5/5 ?</span></div>
+      <h3>Un message pas si subtil</h3>
+      <p>Au milieu d'une conversation sur les ragots des écoles de pilotage, tu glisses ça. J'ai mis un peu de temps à faire le readback, je l'admets.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>C'est juste que malheureusement je ne me fais pas approcher par ceux qui m'intéressent 😂😂🤫<small>17:48</small></div>
+        <div class="msg r"><em>Roméo</em>N'empêche toi tu vas être fort demandée heiiiiiiiin 😂<small>18:25</small></div>
+        <div class="msg n"><em>Nell</em>Haha on verra bien 😂 Pour le moment j'attends encore que la personne qui m'intéresse fasse un pas 🤫🫣<small>18:29</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>27.07.26</b></span><span>EBCI</span><span>PA28</span><span>Skill test : réussi ✓</span></div>
+      <h3>Commandant Nell 👑</h3>
+      <p>Ton skill test, réussi. Petit détail que j'adore : ta PPL et la mienne datent toutes les deux d'un 27 juillet. Un an d'écart, même date. Coïncidence ? Je ne crois pas.</p>
+      <div class="photos">
+        <figure style="--rot:1.4deg"><img src="img/skill.jpg" loading="lazy" alt="Nell à côté de l'avion le jour de son skill test"><figcaption>Le jour J</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg r"><em>Roméo</em>Magnifique !! 😍<small>21:39</small></div>
+        <div class="msg r"><em>Roméo</em>Toutes mes félicitations Commandant ! 👑<small>21:40</small></div>
+        <div class="msg r"><em>Roméo</em>Mais ma PPL date du 27 😁😁<small>21:46</small></div>
+        <div class="msg r"><em>Roméo</em>Un numéro de licence de plus :)<small>21:49</small></div>
+      </div>
+    </article>
+
+    <div class="month">Août</div>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>29.08.26</b></span><span>Sélections</span><span>640 candidats</span></div>
+      <h3>Top 10 %, et la suite</h3>
+      <p>Les sélections Brussels Airlines : 640 candidats au départ, et toi dans les 60 derniers. Tu étais déçue. Moi je retiens que tu étais dans les 10 % du haut, et que tu as continué l'ATPL dès septembre comme si de rien n'était.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>J'étais dans les soixante derniers et ils en prenaient entre 10 et 15. On était 640 au départ…<small>16:43</small></div>
+        <div class="msg n"><em>Nell</em>Pour notre vol ensemble, Spa, tu as déjà été ? Ou Reims mais la carte du resto est moins bien 🤣?<small>16:25</small></div>
+      </div>
+    </article>
+
+    <div class="month">Septembre</div>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>11.09.26</b></span><span>Lendemain de soirée</span><span>Question piège</span></div>
+      <h3>Quelqu'un avait déjà compris</h3>
+      <p>Une soirée où on n'était même pas assis côte à côte. Et le lendemain, quelqu'un nous posait déjà la question.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Ouii, c'était marrant de voir ceux qui se sont rajoutés 😂 dommage qu'on s'est pas assis à côté mais bon 😝<small>00:24</small></div>
+        <div class="msg n"><em>Nell</em>Tiens, je rêve ou Nathan il t'a demandé si on était ensemble ?<small>10:00</small></div>
+        <div class="msg n"><em>Nell</em>C'est quand même bizarre que tu aies un truc pour moi entre hier soir et maintenant 😂🥸 En quel honneur en plus ?<small>20:57</small></div>
+        <div class="msg r"><em>Roméo</em>J'te dis c'est pas ce que tu crois 😂 J'aurais aimé. Mais plus tard on va dire 🤣<small>21:15</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>12.09.26</b></span><span>WhatsApp</span><span>Nuit</span><span>Concept déposé</span></div>
+      <h3>Le cadeau, c'est toi. Et le « night dating »</h3>
+      <p>Tu ne lâches rien de la journée sur ma surprise. Puis on invente un concept : sunset, puis night, puis un verre. Le « night dating ». Il fallait juste qu'on le fasse pour de vrai.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Ah c'est juste pour me voir c'est ça ? 😁<small>18:46</small></div>
+        <div class="msg n"><em>Nell</em>Le cadeau c'est toiiiii 😝😁<small>18:47</small></div>
+        <div class="msg r"><em>Roméo</em>Moi ça me va si tu le prends comme ça 🙃<small>19:11</small></div>
+        <div class="msg n"><em>Nell</em>Sunset puis night puis aller boire un verre 🤣🤣🤪🤪🤩<small>21:13</small></div>
+        <div class="msg r"><em>Roméo</em>Night dating 😂 pas mal<small>21:17</small></div>
+        <div class="msg n"><em>Nell</em>J'ai 0 patience quand j'ai hâte de faire un truc<small>21:28</small></div>
+        <div class="msg n"><em>Nell</em>Ou de voir quelqu'un<small>21:29</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>16.09.26</b></span><span>Briefing paternel</span><span>Menace : élevée</span></div>
+      <h3>Le grand P veut me voir</h3>
+      <p>Ton papa voulait me voir quand je passerais te chercher. Il t'avait dit de ne pas me prévenir. Tu m'as prévenu quand même. Merci pour ce NOTAM.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Plus !!! Qu'il aimerait te voir quand tu viens me chercher 👀 Pas du tout gênant, merci papa 🤨🤯😶‍🌫️<small>19:49</small></div>
+        <div class="msg r"><em>Roméo</em>Je suis un homme mort 💀<small>19:52</small></div>
+        <div class="msg n"><em>Nell</em>Il m'a dit de pas te prévenir mais bon j'ai un peu pitié, et je suis gênée 🫠🤯😂<small>19:55</small></div>
+        <div class="msg r"><em>Roméo</em>Mike Oscar Roméo Tango<small>20:01</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>17.09.26</b></span><span>Album photo</span><span>9 pépites</span></div>
+      <h3>L'album des pépites</h3>
+      <p>Tu commences un album avec les trucs mignons que je te dis. Neuf au début, « comme ça c'est déjà prêt pour la suite ». Ce site, c'est la suite.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>J'ai fait un album des quelques pépites que tu m'as sorties 🤪🥰<small>19:09</small></div>
+        <div class="msg n"><em>Nell</em>En fait j'ai que 9 trucs mais comme ça c'est déjà prêt pour la suite tu vois 😆🥰<small>19:16</small></div>
+        <div class="msg n"><em>Nell</em>J'ai tout gardé 🥰🥰😍<small>19:18</small></div>
+        <div class="msg r"><em>Roméo</em>🥹🥰<small>19:20</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>19.09.26</b></span><span>Sol</span><span>Premier rendez-vous</span><span>Papa : rencontré</span></div>
+      <h3>Le premier rendez-vous</h3>
+      <p>Je suis passé te chercher (le grand P de bonne humeur, il revenait de moto). Une balade, une bouteille, des fous rires sur des « étriers ». Et à la fin, deux timides qui n'osent pas.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg r"><em>Roméo</em>Bon dis-lui au cas où que mes potes savent que je dois répondre aux messages demain et que si pas, ça veut dire que j'suis dans la mouise 🫠<small>10:21</small></div>
+        <div class="msg n"><em>Nell</em>Zut alors, on va devoir se coller 😆😅<small>10:29</small></div>
+        <div class="msg n"><em>Nell</em>Merciiii beaucoup beaucoup beaucoup 🥰🥰❤️ c'était un très chouette moment avec toi 🥰😍<small>23:12</small></div>
+        <div class="msg n"><em>Nell</em>J'avoue que j'ai peut-être attendu un petit bisou… mais j'étais beaucoup trop timide pour faire le premier pas 😌🙈<small>23:26</small></div>
+        <div class="msg r"><em>Roméo</em>Ose ! Ça passe avec moi ! 🥰🫣<small>23:41</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big" id="kiss">
+      <div class="lrow"><span><b>29.09.26</b></span><span>Vol local</span><span>DA40 · sunset + night</span><span>Sushis à 4000 ft</span></div>
+      <h3>Le night dating. Le bisou. Le « je t'aime ».</h3>
+      <p>Le coucher de soleil sur l'aile, les lumières de la Belgique en dessous, des sushis à 4000 ft. En te déposant, un bisou soigneusement planifié hors du champ des caméras de chez toi. Tu ne t'y attendais pas. Et à 00h57, j'ai écrit ce que je pensais depuis un moment.</p>
+      <div class="photos">
+        <figure style="--rot:1.5deg"><img src="img/sunsetselfie.jpg" loading="lazy" alt="Selfie de Nell et Roméo dans le cockpit au coucher du soleil"><figcaption>Juste avant la nuit</figcaption></figure>
+        <figure style="--rot:-2deg"><img src="img/sunsetwing.jpg" loading="lazy" alt="Coucher de soleil vu depuis l'aile"><figcaption>Vue depuis l'aile</figcaption></figure>
+        <figure style="--rot:2deg"><img class="tall" src="img/nightlights.jpg" loading="lazy" alt="Les lumières de la ville la nuit vues d'avion"><figcaption>La Belgique by night</figcaption></figure>
+        <figure style="--rot:-1.2deg"><img class="tall" src="img/nellnight.jpg" loading="lazy" alt="Nell dans le cockpit à la tombée de la nuit"><figcaption>Ma copilote</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Je ne m'y attendais pas 🤪🫣🥰<small>00:26</small></div>
+        <div class="msg r"><em>Roméo</em>J'aurais pas été manger des sushis seul à 4000 ft quoi 😂😂<small>00:29</small></div>
+        <div class="msg n"><em>Nell</em>Ptite technique de ne pas t'être mis devant les caméras quand tu m'as redéposée 😅🫣🥰<small>00:32</small></div>
+        <div class="msg r"><em>Roméo</em>Calculé))<small>00:33</small></div>
+        <div class="msg n"><em>Nell</em>Tu y pensais depuis combien de temps ? 😅😝🥰🫣<small>00:33</small></div>
+        <div class="msg r"><em>Roméo</em>Depuis la dernière fois 😂😂<small>00:33</small></div>
+        <div class="msg r"><em>Roméo</em>T'es trop bien comme personne à avoir à côté de soi. C'est fou<small>00:41</small></div>
+        <div class="msg r"><em>Roméo</em>Je crois que je t'aime 🥰<small>00:57</small></div>
+        <div class="msg n"><em>Nell</em>Ooooh ! Mais moi aussi 🫶🏼🫶🏼🫶🏼<small>00:57</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>30.09–01.10.26</b></span><span>Le lendemain</span><span>Papillons : partout</span></div>
+      <h3>Le premier bisou de ta vie</h3>
+      <p>Le lendemain matin, tu me l'as écrit, comme ça, entre deux messages. Le premier bisou de ta vie. Je relis encore ce message. De tous les vols que je ferai, c'est celui-là que je garderai en première page de mon carnet.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>C'était absolument parfait et incroyable encore une fois 😍🥰😝<small>30.09 · 00:31</small></div>
+        <div class="msg n"><em>Nell</em>Et y'a pas besoin que ce soit parfait surtout aussi. Premier bisou de ma vie 🫣😶‍🌫️🫣<small>10:44</small></div>
+        <div class="msg n"><em>Nell</em>J'aimerais bien déjà te revoir et te faire un câlin 🥰🫣😝<small>12:24</small></div>
+        <div class="msg n"><em>Nell</em>Mon papa ce matin il me demande « ça va t'as pas eu peur de lui faire un bisou ? » Euhhh comment dire papa… j'ai pas eu le temps d'avoir peur en fait 😂😂🤪<small>01.10 · 20:54</small></div>
+        <div class="msg n"><em>Nell</em>J'ai eu les papillons plus que dans le ventre mais dans tout mon corps en un coup là 😝🥰<small>20:52</small></div>
+        <div class="msg r"><em>Roméo</em>Moi aussi j't'assure ! 😇<small>20:53</small></div>
+        <div class="msg n"><em>Nell</em>Gros bisouuus ! Bonne nuit 😴 Je t'aime fort 💪🏻🥰🥰❤️ À demainnn 😘😘<small>22:56</small></div>
+      </div>
+    </article>
+
+    <div class="month">Octobre</div>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>04.10.26</b></span><span>EBCI → LFAT</span><span>PA28</span><span>PIC : Nell</span></div>
+      <h3>Le Touquet, promesse tenue</h3>
+      <p>À Texel tu avais dit « la prochaine fois c'est moi qui t'emmène ». Trois mois plus tard : toi aux commandes, moi en princesse, la côte d'Opale CAVOK, et un doudou qui ajoute enfin une destination à son carnet de vol. Puis une balade dans Bruxelles pour finir.</p>
+      <div class="photos">
+        <figure style="--rot:-1.5deg"><img src="img/touquet.jpg" loading="lazy" alt="Selfie de Nell et Roméo devant l'avion au Touquet"><figcaption>Commandant et sa princesse</figcaption></figure>
+        <figure style="--rot:2deg"><img src="img/nellpilot.jpg" loading="lazy" alt="Nell aux commandes du PA28"><figcaption>Aux commandes</figcaption></figure>
+        <figure style="--rot:-2deg"><img class="tall" src="img/doudou.jpg" loading="lazy" alt="Le doudou de Nell sur le tableau de bord"><figcaption>Le doudou, PNC</figcaption></figure>
+        <figure style="--rot:1deg"><img src="img/coast.jpg" loading="lazy" alt="La côte vue depuis l'avion"><figcaption>La côte d'Opale</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Non dimanche 4 c'est toi la princesse, tu laisses ton portefeuille chez toi 🤣🤣<small>22.09 · 22:08</small></div>
+        <div class="msg r"><em>Roméo</em>Pas grand chose à part un ptit vol aller retour sur le Touquet 😂😂<small>20:11</small></div>
+        <div class="msg r"><em>Roméo</em>T'as aimé m'avoir en Princesse ? 🤣🤣<small>20:24</small></div>
+        <div class="msg r"><em>Roméo</em>C'est moi qui ai de la chance 🥰🥰<small>20:42</small></div>
+        <div class="msg n"><em>Nell</em>Je m'en fous j'assume j'ai toujours un doudou 😅😂🥰🥰🤭<small>21:06</small></div>
+        <div class="msg n"><em>Nell</em>C'est vrai 🥰🥰❤️ je me sens vraiment bien avec toi 💕💕<small>21:29</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>09.10.26</b></span><span>Sortie</span><span>Fleurs assorties au gilet</span></div>
+      <h3>Des fleurs, et l'avis des parents</h3>
+      <p>Des fleurs (oui, parce qu'on en avait parlé), une sortie, ta conduite validée après un briefing en bonne et due forme. Et le lendemain matin, le verdict officiel de tes parents.</p>
+      <div class="photos">
+        <figure style="--rot:1.6deg;max-width:280px"><img class="tall" src="img/flowers.jpg" loading="lazy" alt="Le bouquet de fleurs offert le 9 octobre"><figcaption>Elles sentent bon</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Pour tout (fleurs, sortie, taxi…)<small>22:52</small></div>
+        <div class="msg n"><em>Nell</em>Mais la prochaine fois c'est moi qui paye t'es insupportable 😫😂<small>22:52</small></div>
+        <div class="msg r"><em>Roméo</em>Avec tes yeux pétillants 😍<small>23:09</small></div>
+        <div class="msg n"><em>Nell</em>Je me sens bien avec toi 😘🫶🏼<small>23:10</small></div>
+        <div class="msg r"><em>Roméo</em>Je t'aime comme tu es, et ce que tu fais comme tu le fais ! ❤️<small>23:57</small></div>
+        <div class="msg n"><em>Nell</em>Ma maman m'a dit « Papa et moi trouvons que Roméo a beaucoup d'élégance et de délicatesse »<small>10.10 · 09:26</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>10.10.26</b></span><span>Rapport du grand P</span><span>Dashcam : preuve à l'appui</span></div>
+      <h3>« Spot on », d'après ton papa</h3>
+      <p>Ce soir-là, j'étais le sujet de discussion chez toi. Verdict du grand P : « pour un premier amoureux, c'est spot on ». Et puis on s'est souvenus que ma dashcam avait tout filmé. Le premier vrai bisou, archivé pour toujours.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Tu étais le sujet de discussion ce soir 🫣🤭😝<small>21:00</small></div>
+        <div class="msg n"><em>Nell</em>Mon papa « il est très attentionné, délicat, élégant… », « franchement pour un premier amoureux, c'est spot on »<small>21:03</small></div>
+        <div class="msg n"><em>Nell</em>Il t'adore<small>21:03</small></div>
+        <div class="msg n"><em>Nell</em>Ta dashcam elle a pas pris ça ? 🤫🤪🤣🥰<small>21:29</small></div>
+        <div class="msg r"><em>Roméo</em>Purée si j'crois<small>21:30</small></div>
+        <div class="msg r"><em>Roméo</em>En plus on voit le moment parfait : « vrai bisou ? » « Oui » 🤣🤣<small>21:32</small></div>
+        <div class="msg n"><em>Nell</em>Et ça m'est surtout arrivé de tomber sur un beau gosse qui est le mec le plus parfait de la terre<small>21:54</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>11–12.10.26</b></span><span>Auto-école</span><span>Boîte manuelle</span></div>
+      <h3>Pilote, et bientôt conductrice</h3>
+      <p>Tu sais piloter un avion mais pas encore conduire une voiture. Je t'explique la boîte manuelle, et ton moniteur est choqué que tu saches l'expliquer aussi bien. Le 27, il te dira que ta séance était excellente.</p>
+      <div class="photos">
+        <figure style="--rot:-1.4deg"><img src="img/driving.jpg" loading="lazy" alt="Nell au volant pendant une leçon de conduite"><figcaption>Elle lui va bien</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Elle me va bien cette voiture j'adore 😊🤣🤭<small>11.10 · 17:05</small></div>
+        <div class="msg r"><em>Roméo</em>Si tu savais comme moi je suis fier de toi 🤭😘<small>12.10 · 09:38</small></div>
+        <div class="msg n"><em>Nell</em>Par contre !!! Merci pour tes explications de la boîte manuelle !!!! Parce qu'il était choqué que j'arrive à l'expliquer comme ça 🤪🥰😝<small>12.10 · 16:32</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>13.10.26</b></span><span>EBNM → balade</span><span>Hugo spritz au sol</span></div>
+      <h3>Ma source d'énergie</h3>
+      <p>Midi avec ta marraine à la brasserie de l'aérodrome de Namur, le soir une balade avec moi. Toi qui m'expliques que tu n'as pas besoin de « batterie sociale » avec moi. Moi qui t'explique que ma mère demande vingt fois par seconde si tu es jolie.</p>
+      <div class="photos">
+        <figure style="--rot:1.2deg"><img src="img/airfield.jpg" loading="lazy" alt="Nell sur un aérodrome"><figcaption>EBNM, avec ta marraine</figcaption></figure>
+        <figure style="--rot:-1.8deg"><img class="tall" src="img/resto.jpg" loading="lazy" alt="Nell souriante au restaurant"><figcaption>Le sourire</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Tu es ma source d'énergie plutôt 😂🥰🥰 pas besoin de « batterie sociale » avec toi 🫶🏼🫶🏼<small>16:28</small></div>
+        <div class="msg r"><em>Roméo</em>Et ma mère qui demande 20 fois par seconde si t'es jolie 😂😂<small>21:33</small></div>
+        <div class="msg n"><em>Nell</em>Non mais comme ça ta maman pourra voir d'elle-même si elle me trouve jolie ou pas 😆🤣<small>21:37</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>14.10.26</b></span><span>Voiture</span><span>Ta main dans la mienne</span><span>☁️ FL ∞</span></div>
+      <h3>Planer ensemble au-dessus des nuages</h3>
+      <p>Je t'ai juste pris la main dans la voiture. Toi, tu as eu des papillons partout. Et avant de dormir, tu m'as souhaité le plus beau rêve qu'un pilote puisse faire.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Tu me les as mis de partout les papillons là quand tu as pris ma main dans la voiture 🥰🥰<small>22:27</small></div>
+        <div class="msg n"><em>Nell</em>Aaaah j'aurais bien voulu te garder dans mes bras moiii 🤭😝🥰<small>22:30</small></div>
+        <div class="msg n"><em>Nell</em>Je t'aurais bien gardé avec moi pour te serrer dans mes bras toute la nuit 🥰🥰🥰❤️<small>22:37</small></div>
+        <div class="msg n"><em>Nell</em>Fais de beaux rêves où l'on plane ensemble au-dessus des nuages ☁️<small>22:41</small></div>
+        <div class="msg n"><em>Nell</em>T'es trop mimi quand tu me donnes ta main 🤣🥰🥰🥰 j'adooore 🫶🏼❤️<small>15.10 · 15:24</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>14–16.10.26</b></span><span>Cadeau</span><span>Porte-clé · porte-bonheur</span></div>
+      <h3>Le porte-clé et le porte-bonheur</h3>
+      <p>Tu m'offres un porte-clé « pour que tu l'aies tout le temps avec toi ». J'ai failli le perdre deux fois (crise cardiaque incluse). Et toi tu fais la liste de tout ce que j'ai fait pour toi, comme si c'était exceptionnel.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Tu aimes bien le porte-clé ou bof ? Je me suis dit que ce serait quelque chose que tu aurais tout le temps avec toi ou presque 😅🥰🫣<small>14.10 · 22:28</small></div>
+        <div class="msg r"><em>Roméo</em>T'es mon porte-bonheur 💞<small>15.10 · 22:10</small></div>
+        <div class="msg n"><em>Nell</em>…après que tu m'aies ouvert toutes les portes, payé le resto, vérifié que je sois à l'ombre…<small>16.10 · 20:57</small></div>
+        <div class="msg n"><em>Nell</em>Vraiment c'était trop bien à chaque fois qu'on a fait quelque chose<small>16.10 · 21:02</small></div>
+        <div class="msg r"><em>Roméo</em>Regarde les étoiles filantes 😂😂 Fais des vœux 🫠🤣<small>17.10 · 21:07</small></div>
+        <div class="msg n"><em>Nell</em>Hummmm quel vœu !? Rester toute ma vie avec toiiii 🥰🤪🤣<small>21:07</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>19–20.10.26</b></span><span>Bruxelles</span><span>Anniversaire</span><span>Spotting + Atomium</span></div>
+      <h3>Joyeux anniversaire, petit ange aux cheveux d'or</h3>
+      <p>Un anniversaire, du spotting dans le froid (la prochaine fois : sacs de couchage), l'Atomium illuminé, et un cadeau « beaucoup trop grand » d'après toi. Merci maman pour le coup de main.</p>
+      <div class="photos">
+        <figure style="--rot:1deg;max-width:280px"><img class="tall" src="img/atomium.jpg" loading="lazy" alt="L'Atomium illuminé la nuit"><figcaption>Bruxelles, 20.10</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg r"><em>Roméo</em>Joyeux Anniversaire mon petit ange aux cheveux d'or ! ✨<small>19.10 · 06:37</small></div>
+        <div class="msg n"><em>Nell</em>Tu es plus excité que moi pour mon anniversaire 🥳<small>18:38</small></div>
+        <div class="msg r"><em>Roméo</em>Je t'aime de toutes mes forces 💖 J'aime tout ce que tu es, ce que tu fais, ce que tu dis 💞<small>22:43</small></div>
+        <div class="msg n"><em>Nell</em>Tu as abusé sur la taille du cadeau par contre !!! 🙈🙈🤯🫨<small>20.10 · 22:38</small></div>
+        <div class="msg n"><em>Nell</em>Je sais mais être avec toi c'est le plus beau des cadeaux<small>22:49</small></div>
+        <div class="msg n"><em>Nell</em>Le temps passe trop vite avec toiii 🥰🥰🥰😝❤️<small>23:03</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>21–22.10.26</b></span><span>Après l'anniversaire</span><span>Câlins : magiques</span></div>
+      <h3>Le mec parfait, la fille parfaite</h3>
+      <p>Tu m'écris que je suis « littéralement le mec parfait ». Je te réponds la même phrase, au féminin, trois minutes plus tard. Le soir, tu réclames mes « petits câlins magiques ». Le lendemain, tu me dis que tu ne pensais pas qu'on pouvait être amoureux comme ça. Moi non plus.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg r"><em>Roméo</em>Mooooh mon petit cœur rempli de mignonnerie 🥰🥰<small>21.10 · 08:48</small></div>
+        <div class="msg n"><em>Nell</em>T'es littéralement le mec parfait dont toutes les filles rêvent en plus 🥰🥹😘<small>10:04</small></div>
+        <div class="msg r"><em>Roméo</em>T'es littéralement la fille parfaite dont tous les mecs rêvent 🥰🥰<small>10:07</small></div>
+        <div class="msg n"><em>Nell</em>Tu veux pas venir me faire tes petits câlins magiques<small>20:17</small></div>
+        <div class="msg r"><em>Roméo</em>J'aimerais trop !<small>20:17</small></div>
+        <div class="msg r"><em>Roméo</em>Portion supplémentaire de câlins svp<small>21:05</small></div>
+        <div class="msg n"><em>Nell</em>Je t'aime toi et personne d'autre, et Hervé n'a qu'à bien se tenir<small>22.10 · 18:22</small></div>
+        <div class="msg r"><em>Roméo</em>Je t'ai déjà dit que t'étais parfaite ? 💫<small>18:31</small></div>
+        <div class="msg n"><em>Nell</em>Je pensais pas qu'un mec pouvait être amoureux comme ça moiii 🥰🤪<small>20:41</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper">
+      <div class="lrow"><span><b>24–25.10.26</b></span><span>Waterloo</span><span>Bowling</span><span>Papouilles : oui</span></div>
+      <h3>Princesse choupette et prince charmant</h3>
+      <p>La veille, tu m'écris tous mes surnoms d'un coup et ça te fait « bondir le cœur ». Le lendemain : un resto à Waterloo, un bowling, des papouilles sur ta main, mes mains dans ton dos. Et deux personnes qui ne voulaient pas se lâcher.</p>
+      <div class="photos">
+        <figure style="--rot:-1.6deg;max-width:280px"><img class="tall" src="img/bowling.jpg" loading="lazy" alt="Le bowling sous les néons bleus"><figcaption>Strike (ou presque)</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Ma chérie, choupette, ma princesse et mon ptit cœur. Ohlala, ça me fait bondir mon cœur à chaque fois 🫣🥰❤️<small>24.10 · 22:53</small></div>
+        <div class="msg r"><em>Roméo</em>Je t'aime très très fort 🥰 retiens-le 🤭<small>24.10 · 22:59</small></div>
+        <div class="msg r"><em>Roméo</em>Déjà que je dois mettre un harnais pour ne pas fondre dans tes yeux 😂 une corde pour m'attacher à chaque fois que je prends ta main 🥰<small>25.10 · 09:24</small></div>
+        <div class="msg n"><em>Nell</em>C'est toi qui me fais fondre<small>09:26</small></div>
+        <div class="msg n"><em>Nell</em>Je t'aime tellement 🥰🥰<small>22:32</small></div>
+        <div class="msg n"><em>Nell</em>Je voulaiiiis pas te lâcheeeer<small>22:45</small></div>
+        <div class="msg n"><em>Nell</em>Oh tes petites papouilles sur ma main et ma jambe 🤩🫣😍<small>22:47</small></div>
+        <div class="msg r"><em>Roméo</em>Bien aimé les câlins ? 🤪 les mains dans le dos 😆<small>22:47</small></div>
+        <div class="msg r"><em>Roméo</em>C'était troooooop bien 🥰<small>22:46</small></div>
+        <div class="msg r"><em>Roméo</em>Princesse choupette 🥰😍<small>22:47</small></div>
+        <div class="msg n"><em>Nell</em>Hihi mon prince charmant 🤭😍😝🥰😆<small>22:47</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>29.10.26</b></span><span>Bout de piste</span><span>Spotting · sunset</span></div>
+      <h3>Venu spotter des avions, j'ai spotté toi</h3>
+      <p>Un coucher de soleil en bout de piste, des avions au-dessus de nos têtes, Uber Eats dans la voiture, des cœurs bien visibles sous les lampadaires. Juste toi dans mes bras, à parler de tout.</p>
+      <div class="photos">
+        <figure style="--rot:-1.4deg"><img class="tall" src="img/spotting.jpg" loading="lazy" alt="Nell photographie un avion qui passe au coucher du soleil"><figcaption>Le plus beau spotting</figcaption></figure>
+        <figure style="--rot:1.8deg"><img class="tall" src="img/spotting2.jpg" loading="lazy" alt="Nell au coucher du soleil en bout de piste"><figcaption>Golden hour</figcaption></figure>
+      </div>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>C'était trop bien d'être dans tes bras et te parler de plein de choses 🥰🥰🥰<small>23:14</small></div>
+        <div class="msg n"><em>Nell</em>Juste tout simple dans tes bras 🥰🥰🤪😍😘<small>23:35</small></div>
+        <div class="msg r"><em>Roméo</em>Je t'aime encore plus 💞💯<small>23:35</small></div>
+        <div class="msg n"><em>Nell</em>Les autres t'as oublié que tu venais spotter les avions et pas moi 😂😂<small>30.10 · 09:04</small></div>
+        <div class="msg r"><em>Roméo</em>Hier quand tu me parlais de l'école j'voulais juste m'arrêter et te prendre dans mes bras 🥰🥰<small>30.10 · 09:29</small></div>
+      </div>
+    </article>
+
+    <article class="entry paper big">
+      <div class="lrow"><span><b>31.10.26</b></span><span>Ce soir</span><span>Halloween</span><span>Prochaine étape : ?</span></div>
+      <h3>Aujourd'hui</h3>
+      <p>Un film d'horreur pour Halloween, dans une salle vide. Toi qui as peur dès que je fais « bouh ». Des cravings de popcorn et de frites. Et ton papa qui refuse de te prêter la voiture. Le carnet continue.</p>
+      <button class="chip" aria-expanded="false">Voir la pépite 💬</button>
+      <div class="chat" hidden>
+        <div class="msg n"><em>Nell</em>Déjà tu me fais peur toi quand tu me fais bouh alors euh<small>30.10 · 17:22</small></div>
+        <div class="msg n"><em>Nell</em>Mais tu seras là 😍🥰<small>17:23</small></div>
+        <div class="msg r"><em>Roméo</em>La salle est VIDE 😂😂<small>17:37</small></div>
+        <div class="msg n"><em>Nell</em>T'inquiète dans tous les cas je serai dans tes bras<small>31.10 · 08:10</small></div>
+        <div class="msg n"><em>Nell</em>Logique je te vois ce soir<small>10:18</small></div>
+      </div>
+      <p class="hand">Prochaine destination : c'est toi qui choisis.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ CARTE ============ -->
+<section class="chapter" id="carte" aria-labelledby="t-carte">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 3 · carte VFR</p>
+    <h2 id="t-carte">Notre carte du ciel</h2>
+    <p class="lead">Nos vols en rose, nos sorties au sol en jaune, et les destinations dont on a parlé en pointillés. Touche un point pour lire son histoire.</p>
+  </div>
+  <div class="paper">
+    <div class="map-wrap" id="mapWrap"></div>
+    <div class="map-legend">
+      <span><i></i> Vol ensemble</span>
+      <span><i class="dash"></i> Destination prévue</span>
+      <span><i class="dot"></i> Sortie au sol</span>
+    </div>
+    <div class="row-btns" style="margin-top:12px"><button class="btn small" id="replay">Rejouer nos vols ✈︎</button></div>
+    <div class="map-info" id="mapInfo" aria-live="polite"><h4>EBCI · Charleroi</h4><p>Notre base. Celle des T&amp;G de Nell, de mes « super landings » et du parking où ton papa m'attendait.</p></div>
+  </div>
+</section>
+
+<!-- ============ JEUX ============ -->
+<section class="chapter" id="hangar" aria-labelledby="t-hangar">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 4 · le hangar à jeux</p>
+    <h2 id="t-hangar">Cinq épreuves pour toi</h2>
+    <p class="lead">Atterrissage, mémoire, NOTAMs, alphabet OTAN et tickets à gratter. Aucune n'est éliminatoire.</p>
+  </div>
+  <div class="paper">
+    <div class="game-tabs" role="tablist" id="gameTabs">
+      <button role="tab" aria-selected="true" data-g="g-butter">🧈 Absolute Butter</button>
+      <button role="tab" aria-selected="false" data-g="g-memory">🃏 Memory</button>
+      <button role="tab" aria-selected="false" data-g="g-notam">📋 Chasse aux NOTAMs</button>
+      <button role="tab" aria-selected="false" data-g="g-nato">📻 Message codé</button>
+      <button role="tab" aria-selected="false" data-g="g-scratch">🎟️ Bons de vol</button>
+    </div>
+
+    <div class="game-panel" id="g-butter" role="tabpanel">
+      <h3 style="margin:0 0 6px">Absolute Butter</h3>
+      <p class="lead">Deux Ryanair attendent que tu te poses. Maintiens le bouton (ou la barre espace, ou ton doigt sur l'écran) pour remettre des gaz. Pose-toi sur la piste avec la vitesse verticale la plus faible possible.</p>
+      <div class="row-btns" style="margin-top:10px">
+        <div class="seg" id="lvl"><button aria-pressed="true" data-l="0">CAVOK</button><button aria-pressed="false" data-l="1">Rafales</button><button aria-pressed="false" data-l="2">Nuit</button></div>
+      </div>
+      <div class="game-wrap" id="gameWrap" style="margin-top:12px"><canvas id="game" aria-label="Mini-jeu d'atterrissage"></canvas></div>
+      <div class="row-btns" style="margin-top:12px">
+        <button class="btn" id="throttle">Gaz ! (maintenir)</button>
+        <button class="btn ghost" id="restart">Nouvelle approche</button>
+        <span class="small-note" id="best"></span>
+      </div>
+      <p class="verdict" id="verdict" aria-live="polite">Prête ? Appuie sur « Nouvelle approche ».</p>
+    </div>
+
+    <div class="game-panel" id="g-memory" role="tabpanel" hidden>
+      <h3 style="margin:0 0 6px">Memory du carnet</h3>
+      <p class="lead">Retrouve les 8 paires de nos photos. Le moins de coups possible.</p>
+      <div class="memory" id="memory"></div>
+      <div class="row-btns" style="margin-top:12px"><span class="small-note" id="memStat">Coups : 0 · Paires : 0/8</span><button class="btn ghost small" id="memReset">Mélanger</button></div>
+      <p class="verdict" id="memMsg" aria-live="polite"></p>
+    </div>
+
+    <div class="game-panel" id="g-notam" role="tabpanel" hidden>
+      <h3 style="margin:0 0 6px">Chasse aux NOTAMs</h3>
+      <p class="lead">30 secondes. Touche les NOTAMs pour les annuler (+1). Les cœurs valent +3. Ce soir, rien ne nous empêche de décoller.</p>
+      <div class="nhud"><span>Score : <b id="nScore">0</b></span><span>Temps : <b id="nTime">30</b> s</span><button class="btn small" id="nStart">Commencer</button></div>
+      <div class="notam-grid" id="notamGrid"></div>
+      <p class="verdict" id="nMsg" aria-live="polite"></p>
+    </div>
+
+    <div class="game-panel" id="g-nato" role="tabpanel" hidden>
+      <h3 style="margin:0 0 6px">Message codé</h3>
+      <p class="lead">Un message t'attend en alphabet OTAN. Décode chaque mot et tape-le. (Indice : tu connais déjà Mike Oscar Roméo Tango.)</p>
+      <div class="nato" id="nato"></div>
+      <div class="nato-final" id="natoFinal"><span class="mono">MESSAGE REÇU 5/5</span><strong>TU ES MA COPILOTE</strong><span>Pour la vie. Readback obligatoire.</span></div>
+    </div>
+
+    <div class="game-panel" id="g-scratch" role="tabpanel" hidden>
+      <h3 style="margin:0 0 6px">Bons de vol à gratter</h3>
+      <p class="lead">Gratte avec ton doigt ou ta souris. Chaque bon est valable à vie, sans date d'expiration, à présenter quand tu veux.</p>
+      <div class="scratch" id="scratch"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RADIO ============ -->
+<section class="chapter" id="radio" aria-labelledby="t-radio">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 5 · fréquence pépites</p>
+    <h2 id="t-radio">Radio Nous-deux</h2>
+    <p class="lead">Tu avais commencé un album de mes pépites. Voilà la radio : tourne le bouton pour capter nos plus beaux messages, les tiens et les miens.</p>
+  </div>
+  <div class="radio">
+    <div class="radio-top">
+      <div class="freq" id="freq">121.500<small>MHz</small></div>
+      <div class="seg" id="radioFilter"><button aria-pressed="true" data-w="all">Tous</button><button aria-pressed="false" data-w="R">Roméo</button><button aria-pressed="false" data-w="N">Nell</button></div>
+    </div>
+    <div class="screen" id="screen">
+      <p class="quote" id="quote">Tourne le bouton pour capter une pépite.</p>
+      <p class="quote-meta" id="quoteMeta">FRÉQUENCE EN VEILLE</p>
+    </div>
+    <div class="knobs">
+      <button class="knob" id="kPrev" aria-label="Pépite précédente">◀</button>
+      <button class="knob big" id="kRand" aria-label="Pépite au hasard">🎲</button>
+      <button class="knob" id="kNext" aria-label="Pépite suivante">▶</button>
+      <span class="mono" style="font-size:.78rem;color:#9fb0d6" id="qCount"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SURNOMS ============ -->
+<section class="chapter" id="surnoms" aria-labelledby="t-surnoms">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 6 · indicatifs radio</p>
+    <h2 id="t-surnoms">Nos petits noms</h2>
+    <p class="lead">Tous les indicatifs qu'on s'est donnés, comptés dans nos messages. Plus la bulle est grosse, plus on l'a dit. Touche une bulle.</p>
+  </div>
+  <div class="paper">
+    <div class="nicks" id="nicks"></div>
+    <div class="nick-info" id="nickInfo" aria-live="polite"></div>
+    <div class="nick-legend"><span><i class="r"></i> Roméo → Nell</span><span><i class="n"></i> Nell → Roméo</span><span><i class="b"></i> Dans les deux sens</span></div>
+  </div>
+</section>
+
+<!-- ============ LEXIQUE ============ -->
+<section class="chapter" id="lexique" aria-labelledby="t-lexique">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 7 · lexique NR</p>
+    <h2 id="t-lexique">Le dictionnaire de nous deux</h2>
+    <p class="lead">Les mots qu'on est les seuls à comprendre. Retourne les cartes.</p>
+  </div>
+  <div class="lex" id="lex"></div>
+</section>
+
+<!-- ============ RAISONS ============ -->
+<section class="chapter" id="raisons" aria-labelledby="t-raisons">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 8 · check-list de l'évidence</p>
+    <h2 id="t-raisons">Pourquoi toi</h2>
+    <p class="lead">Toutes vraies, toutes tirées de nos 33 808 messages.</p>
+  </div>
+  <div class="deck">
+    <div class="rcard" id="rcard" aria-live="polite">
+      <div class="rnum" id="rnum">Raison 1</div>
+      <p class="rtext" id="rtext"></p>
+      <p class="rsrc" id="rsrc"></p>
+    </div>
+  </div>
+  <div class="rnav">
+    <button class="btn ghost" id="rPrev" style="background:#fff">← Précédente</button>
+    <button class="btn pink" id="rNext">Raison suivante →</button>
+    <button class="btn" id="rShuffle">🎲 Au hasard</button>
+  </div>
+</section>
+
+<!-- ============ CÂLINS ============ -->
+<section class="chapter" id="calins" aria-labelledby="t-calins">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 9 · objectif 10 000</p>
+    <h2 id="t-calins">Le compteur de câlins</h2>
+    <p class="lead">Le 07.10, tu m'as écrit : « un deuxième, troisième, quatrième… 10 000e câlin aiderait beaucoup ». Alors on compte. Touche le doudou pour un câlin. Maintiens-le pour un câlin magique (+10).</p>
+  </div>
+  <div class="paper hugbox">
+    <button class="hugbtn" id="hugBtn" aria-label="Envoyer un câlin"><span>🧸</span></button>
+    <div class="hugcount"><strong id="hugN">0</strong><span>câlins sur 10 000</span></div>
+    <div class="progress"><i id="hugBar"></i></div>
+    <p class="hand hug-msg" id="hugMsg" aria-live="polite">Premier câlin ?</p>
+    <p class="small-note" style="text-align:center;margin:6px 0 0">Le compteur reste sur ton téléphone. Les vrais, je te les dois en personne.</p>
+  </div>
+</section>
+
+<!-- ============ PROCHAINS VOLS ============ -->
+<section class="chapter" id="prochains" aria-labelledby="t-prochains">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 10 · plan de vol</p>
+    <h2 id="t-prochains">Nos prochains vols</h2>
+    <p class="lead">Tout ce qu'on s'est dit qu'on ferait. Coche ce qu'on a fait, ajoute ce que tu veux. (Ta liste reste sur ton téléphone.)</p>
+  </div>
+  <div class="paper">
+    <p class="eyebrow">Déjà au carnet</p>
+    <ul class="done-list">
+      <li>✓ Texel · 26.06</li><li>✓ Night dating · 29.09</li><li>✓ Le Touquet, toi PIC · 04.10</li><li>✓ L'Atomium de nuit · 20.10</li><li>✓ Bowling · 25.10</li><li>✓ Spotting au sunset · 29.10</li><li>✓ Film d'horreur d'Halloween · 31.10</li>
+    </ul>
+    <p class="eyebrow" style="margin-top:18px">À venir</p>
+    <ul class="bucket" id="bucket"></ul>
+    <div class="add-row">
+      <input id="bucketIn" type="text" placeholder="Ajoute une destination ou une idée…" maxlength="80" aria-label="Nouvelle idée">
+      <button class="btn small pink" id="bucketAdd">Ajouter</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KSA ============ -->
+<section class="chapter" id="ksa" aria-labelledby="t-ksa">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 11 · KSA</p>
+    <h2 id="t-ksa">Examen : matière « nous deux »</h2>
+    <p class="lead">14 questions sur nous deux. Pas de PT qui circule en boîte de nuit, désolé.</p>
+  </div>
+  <div class="paper">
+    <div class="progress"><i id="qBar"></i></div>
+    <div class="q" id="quiz"></div>
+  </div>
+</section>
+
+<!-- ============ CLAIRANCE ============ -->
+<section class="chapter" id="clairance" aria-labelledby="t-cl">
+  <div class="ch-head">
+    <p class="eyebrow">Chapitre 12 · fréquence 121.5 · priorité absolue</p>
+    <h2 id="t-cl">Demande de clairance</h2>
+  </div>
+  <div class="paper">
+    <div class="strip">
+      <div class="who">Roméo → Nell</div>
+      Nell, Roméo, bonsoir.<br>
+      Demande : rester ensemble, sans limite de temps, via tous les points que tu veux.<br>
+      Montée vers le niveau « toujours ». Doudou à bord accepté.<br>
+      Câlins illimités, papouilles en option, ta main dans la mienne pendant tout le vol.<br>
+      Restaurant : c'est toi qui paies, cette fois, promis.
+    </div>
+    <div class="answer" id="answer">
+      <button class="btn pink" id="yes">Readback : « Autorisée, pour toujours » ❤️</button>
+      <button class="btn ghost" id="no">Négatif</button>
+    </div>
+    <div class="letter" id="letter">
+      <p>Mon ptit cœur,</p>
+      <p>Le 20 juin, je me battais contre des NOTAMs. Le 26, au-dessus de Texel, tu m'as dit « la prochaine fois c'est moi qui t'emmène ». Tu as tenu parole. Tu tiens toujours parole.</p>
+      <p>Dans la nuit du 29 au 30 septembre, à 00h57, je t'ai écrit « je crois que je t'aime ». Le lendemain matin, tu m'as dit que c'était le premier bisou de ta vie. Depuis, j'ai retiré le « je crois ».</p>
+      <p>Ton papa dit que pour un premier amoureux, c'est « spot on ». Moi je dis que j'ai eu une chance folle : la fille qui dit « hihi » 308 fois, qui préfère les câlins aux bisous, qui trouve nos câlins toujours trop courts, et qui me souhaite de rêver qu'on plane ensemble au-dessus des nuages.</p>
+      <p>Je veux te faire vivre la plus belle histoire possible. Encore des sunsets en bout de piste, des papouilles dans la voiture, des « bon aller :-) » suivis de dix messages, et dix mille câlins. Pour commencer.</p>
+      <p>Tu es mon porte-bonheur, ma princesse choupette, ma copilote. Prochaine destination : c'est toi qui choisis. Je fais le plein, je prends ta main au roulage et je ne la lâche plus.</p>
+      <p>Je t'aime fort 💪🏻 (oui, je te le vole)</p>
+      <p>Ton chou d'amour, Roméo ✈︎</p>
+    </div>
+    <div class="reply" id="reply">
+      <p class="eyebrow" style="margin-top:6px">Ton readback</p>
+      <textarea id="replyTxt" placeholder="Écris-moi ta réponse ici…" aria-label="Ta réponse"></textarea>
+      <div class="row-btns" style="margin-top:10px"><button class="btn pink" id="copyReply">Copier pour me l'envoyer sur WhatsApp</button><span class="small-note" id="copyMsg" aria-live="polite"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="goodnight" aria-label="Bisous">
+  <button class="btn pink" id="gnBtn">Je te fais des bisous 😘</button>
+  <p class="gn-msg" id="gnMsg" aria-live="polite"></p>
+</section>
+<footer>NR 2909 · EBCI → ∞<br>33 808 messages, 22 photos, 1 doudou, 29 « ptit cœur », beaucoup trop de 😂<br>Astuce : tape « bisou » sur ton clavier, ou touche le 🧸 cinq fois.</footer>
+</main>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const fmt=n=>n.toLocaleString('fr-BE');
+const MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+
+/* ================= SOUND ================= */
+let AC=null, soundOn=false;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}return AC}
+function tone(f,d,type,vol,when,f2){if(!soundOn)return;const a=ac();if(!a)return;const t=a.currentTime+(when||0);const o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||.15,t+.02);g.gain.exponentialRampToValueAtTime(0.0001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.05)}
+const sfx={
+  chime(){tone(1046,.9,'sine',.18,0);tone(784,1.1,'sine',.16,.45)},
+  ok(){tone(880,.12,'square',.06,0);tone(1320,.18,'square',.06,.1)},
+  ko(){tone(220,.25,'sawtooth',.07,0,160)},
+  squelch(){if(!soundOn)return;const a=ac();if(!a)return;const len=a.sampleRate*.18,b=a.createBuffer(1,len,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*(1-i/len);const s=a.createBufferSource();s.buffer=b;const f=a.createBiquadFilter();f.type='bandpass';f.frequency.value=1800;const g=a.createGain();g.gain.value=.25;s.connect(f).connect(g).connect(a.destination);s.start()},
+  engine(){tone(55,2.2,'sawtooth',.12,0,120);tone(110,2.2,'square',.03,0,240)},
+  pop(){tone(600,.08,'sine',.12,0,900)}
+};
+$('#soundBtn').addEventListener('click',e=>{soundOn=!soundOn;const b=e.currentTarget;b.textContent=soundOn?'🔊':'🔇';b.setAttribute('aria-pressed',soundOn);b.setAttribute('aria-label',soundOn?'Couper le son':'Activer le son');if(soundOn){ac();AC&&AC.resume&&AC.resume();sfx.chime()}});
+
+/* ================= FX ================= */
+function hearts(x,y,n,set){
+  if(reduce)return;set=set||['❤️','🥰','💗','✈️','🧸','💞'];
+  for(let i=0;i<n;i++){const h=document.createElement('span');h.className='heart';h.textContent=set[Math.floor(Math.random()*set.length)];document.body.appendChild(h);
+    const a=Math.random()*Math.PI*2,dist=80+Math.random()*180,dx=Math.cos(a)*dist,dy=Math.sin(a)*dist-120;
+    h.animate([{transform:`translate(${x}px,${y}px) translate(-50%,-50%) scale(.4)`,opacity:1},{transform:`translate(${x+dx}px,${y+dy}px) translate(-50%,-50%) scale(${1+Math.random()})`,opacity:0}],{duration:1200+Math.random()*900,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>h.remove();}
+}
+function rain(set,n){
+  if(reduce)return;
+  for(let i=0;i<n;i++){const h=document.createElement('span');h.className='heart';h.textContent=set[i%set.length];h.style.fontSize=(18+Math.random()*22)+'px';document.body.appendChild(h);
+    const x=Math.random()*innerWidth,d=2500+Math.random()*2500,delay=Math.random()*1200,rot=(Math.random()*2-1)*360;
+    h.animate([{transform:`translate(${x}px,-60px) rotate(0)`},{transform:`translate(${x+(Math.random()*120-60)}px,${innerHeight+60}px) rotate(${rot}deg)`}],{duration:d,delay,easing:'ease-in'}).onfinish=()=>h.remove();}
+}
+function centerOf(el){const r=el.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2]}
+
+/* ================= SKY / SCROLL ================= */
+const night=$('#night'),dusk=$('#dusk');
+for(let i=0;i<110;i++){const s=document.createElement('span');s.className='star';s.style.left=(Math.random()*100)+'%';s.style.top=(Math.random()*100)+'%';s.style.animationDelay=(Math.random()*3)+'s';if(Math.random()<.2)s.style.width=s.style.height='3px';night.appendChild(s)}
+const clouds=[];
+[[6,140,1],[64,300,.8],[18,560,.6],[78,720,.9],[40,900,.7]].forEach(([x,y,sc])=>{const c=document.createElement('div');c.className='cloud';c.style.left=x+'vw';c.style.top=y+'px';c.style.transform='scale('+sc+')';[[0,20,70,40],[30,0,80,60],[75,18,60,42]].forEach(([l,t,w,h])=>{const i=document.createElement('i');i.style.cssText=`left:${l}px;top:${t}px;width:${w}px;height:${h}px`;c.appendChild(i)});document.body.appendChild(c);clouds.push(c)});
+const hudBar=$('#hudBar'),hudPlane=$('#hudPlane'),nav=$('#hudNav'),links=$$('#hudNav a');
+const sections=links.map(a=>$(a.getAttribute('href')));
+const log=$('#carnet'),logPlane=$('#logPlane');
+let ticking=false,activeId='';
+function onScroll(){
+  ticking=false;
+  const max=document.documentElement.scrollHeight-innerHeight,p=max>0?scrollY/max:0;
+  dusk.style.opacity=clamp((p-.22)/.16,0,1);night.style.opacity=clamp((p-.40)/.16,0,1);
+  clouds.forEach((c,i)=>{c.style.opacity=(1-clamp((p-.3)/.15,0,1))*.85;c.style.translate='0 '+(-scrollY*(.12+i*.04))+'px'});
+  hudBar.style.width=(p*100)+'%';hudPlane.style.left=(p*100)+'%';
+  const r=log.getBoundingClientRect();
+  logPlane.style.top=(clamp((innerHeight*.45-r.top)/r.height,0,1)*(r.height-30))+'px';
+  let cur=sections[0];for(const s of sections){if(s&&s.getBoundingClientRect().top<innerHeight*.35)cur=s}
+  if(cur&&cur.id!==activeId){activeId=cur.id;links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+activeId));const a=links.find(l=>l.classList.contains('on'));if(a)nav.scrollTo({left:a.offsetLeft-nav.clientWidth/2+a.offsetWidth/2,behavior:reduce?'auto':'smooth'})}
+}
+addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});
+addEventListener('resize',onScroll);onScroll();
+
+/* ================= TICKER ================= */
+const T0=new Date('2026-09-30T00:57:00+02:00').getTime();
+const tk={d:$('#tkD'),h:$('#tkH'),m:$('#tkM'),s:$('#tkS')};
+function tick(){let s=Math.max(0,Math.floor((Date.now()-T0)/1000));const d=Math.floor(s/86400);s-=d*86400;const h=Math.floor(s/3600);s-=h*3600;const m=Math.floor(s/60);s-=m*60;tk.d.textContent=d;tk.h.textContent=String(h).padStart(2,'0');tk.m.textContent=String(m).padStart(2,'0');tk.s.textContent=String(s).padStart(2,'0')}
+tick();setInterval(tick,1000);
+
+/* ================= CHECKLIST / ENGINE ================= */
+const cks=$$('#checklist input'),startBtn=$('#startBtn'),engineMsg=$('#engineMsg'),prop=$('#prop');
+const ckMsgs={ck1:'Ceinture : attachée. Clic.',ck2:'Doudou à bord. Masse et centrage : +50 g, on reste dans l’enveloppe.',ck3:'Grand P briefé. Mike Oscar Roméo Tango évité.',ck4:'NOTAMs vérifiés : aucun ne concerne ce soir.',ck5:'Mode hihi : ON.',ck6:'Câlin magique effectué. Je le sens d’ici. 🫂'};
+cks.forEach(c=>c.addEventListener('change',()=>{const n=cks.filter(x=>x.checked).length;startBtn.disabled=n<cks.length;engineMsg.textContent=c.checked?ckMsgs[c.id]+' ('+n+'/6)':'En attente de la check-list ('+n+'/6).';if(c.checked)sfx.pop();if(n===cks.length)engineMsg.textContent='Check-list complète. Prête pour la mise en route.'}));
+startBtn.addEventListener('click',()=>{
+  prop.classList.add('spin');sfx.engine();engineMsg.textContent='« Hélice dégagée ! » … Contact. Pression d’huile dans le vert. ❤️';
+  const [x,y]=centerOf(startBtn);hearts(x,y,12);
+  setTimeout(()=>{$('#pass').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})},reduce?0:1100);
+});
+
+/* ================= BOARDING ================= */
+$('#boardBtn').addEventListener('click',e=>{
+  $('#pass').classList.add('torn');$('#stamp').classList.add('on');sfx.chime();
+  const [x,y]=centerOf(e.currentTarget);hearts(x,y,16);
+  setTimeout(()=>$('#boite').scrollIntoView({behavior:reduce?'auto':'smooth'}),reduce?0:900);
+});
+
+/* ================= COUNTERS ================= */
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;io.unobserve(en.target);const el=en.target,to=+el.dataset.count;if(reduce){el.textContent=fmt(to);return}const t0=performance.now();const step=t=>{const k=clamp((t-t0)/1400,0,1),e=1-Math.pow(1-k,3);el.textContent=fmt(Math.round(to*e));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.6});
+$$('[data-count]').forEach(el=>io.observe(el));
+
+/* ================= CHARTS ================= */
+const SVGNS='http://www.w3.org/2000/svg';
+const PERDAY=[["20/06",[90,64]],["21/06",[49,34]],["22/06",[29,28]],["23/06",[6,4]],["24/06",[18,10]],["25/06",[69,53]],["26/06",[25,59]],["27/06",[7,8]],["28/06",[0,0]],["29/06",[0,0]],["30/06",[43,20]],["01/07",[33,21]],["02/07",[16,10]],["03/07",[0,0]],["04/07",[0,0]],["05/07",[0,0]],["06/07",[0,0]],["07/07",[0,0]],["08/07",[108,104]],["09/07",[43,39]],["10/07",[0,0]],["11/07",[0,0]],["12/07",[0,0]],["13/07",[33,33]],["14/07",[7,3]],["15/07",[2,1]],["16/07",[0,0]],["17/07",[0,0]],["18/07",[32,29]],["19/07",[50,40]],["20/07",[46,57]],["21/07",[13,10]],["22/07",[22,22]],["23/07",[34,29]],["24/07",[133,119]],["25/07",[63,52]],["26/07",[179,150]],["27/07",[65,49]],["28/07",[37,29]],["29/07",[67,78]],["30/07",[25,32]],["31/07",[26,26]],["01/08",[26,25]],["02/08",[5,6]],["03/08",[12,13]],["04/08",[3,6]],["05/08",[15,17]],["06/08",[131,122]],["07/08",[30,32]],["08/08",[0,0]],["09/08",[50,35]],["10/08",[0,0]],["11/08",[10,12]],["12/08",[34,38]],["13/08",[15,23]],["14/08",[43,52]],["15/08",[3,8]],["16/08",[13,17]],["17/08",[0,0]],["18/08",[42,52]],["19/08",[72,87]],["20/08",[0,0]],["21/08",[0,0]],["22/08",[31,33]],["23/08",[1,2]],["24/08",[48,44]],["25/08",[8,6]],["26/08",[26,29]],["27/08",[10,11]],["28/08",[10,17]],["29/08",[67,51]],["30/08",[9,10]],["31/08",[0,0]],["01/09",[36,34]],["02/09",[75,80]],["03/09",[26,35]],["04/09",[20,23]],["05/09",[81,99]],["06/09",[68,80]],["07/09",[9,10]],["08/09",[26,29]],["09/09",[14,24]],["10/09",[1,6]],["11/09",[127,142]],["12/09",[175,137]],["13/09",[43,38]],["14/09",[71,79]],["15/09",[47,63]],["16/09",[164,186]],["17/09",[288,328]],["18/09",[247,233]],["19/09",[61,68]],["20/09",[243,253]],["21/09",[261,269]],["22/09",[264,298]],["23/09",[260,226]],["24/09",[256,259]],["25/09",[59,69]],["26/09",[62,63]],["27/09",[532,463]],["28/09",[86,77]],["29/09",[91,95]],["30/09",[445,406]],["01/10",[399,416]],["02/10",[228,242]],["03/10",[270,274]],["04/10",[459,306]],["05/10",[209,213]],["06/10",[292,288]],["07/10",[247,263]],["08/10",[348,358]],["09/10",[124,140]],["10/10",[321,318]],["11/10",[517,542]],["12/10",[228,247]],["13/10",[451,448]],["14/10",[245,248]],["15/10",[328,300]],["16/10",[587,672]],["17/10",[144,120]],["18/10",[677,632]],["19/10",[437,403]],["20/10",[247,246]],["21/10",[874,783]],["22/10",[643,542]],["23/10",[301,210]],["24/10",[516,458]],["25/10",[223,177]],["26/10",[191,144]],["27/10",[237,160]],["28/10",[304,268]],["29/10",[137,143]],["30/10",[702,721]],["31/10",[159,126]]];
+const HOURS=[364, 1, 5, 4, 0, 7, 105, 311, 1414, 1798, 1485, 1410, 1581, 1429, 1435, 974, 1114, 1675, 2534, 2722, 3760, 5955, 3079, 646];
+function dlabel(dm){const [d,m]=dm.split('/');return (+d)+' '+MOIS[+m-1]}
+(function climb(){
+  const box=$('#climb');if(!box||!PERDAY.length)return;
+  const W=720,H=250,l=40,r=12,t=18,b=28,n=PERDAY.length,maxV=1800;
+  const tot=PERDAY.map(p=>p[1][0]+p[1][1]);
+  const X=i=>l+i/(n-1)*(W-l-r),Y=v=>t+(1-v/maxV)*(H-t-b);
+  const EV={'26/06':'Texel, premier vol','27/07':'Skill test réussi','19/09':'Premier rendez-vous','29/09':'Night dating et premier bisou','04/10':'Le Touquet, toi aux commandes','21/10':'Record : 1 657 messages'};
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Messages par jour du 20 juin au 31 octobre, montée forte à partir de septembre">`;
+  [0,500,1000,1500].forEach(v=>{s+=`<line x1="${l}" x2="${W-r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e3e8f2" stroke-width="1"/><text x="${l-6}" y="${Y(v)+3}" text-anchor="end">${v?fmt(v):'0'}</text>`});
+  PERDAY.forEach((p,i)=>{if(i===0||p[0].startsWith('01/')){s+=`<text x="${X(i)}" y="${H-8}" text-anchor="${i===0?'start':'middle'}">${i===0?'20 juin':MOIS[+p[0].split('/')[1]-1]}</text>`}});
+  s+=`<text x="${W-r}" y="${H-8}" text-anchor="end">31 oct.</text>`;
+  let line='';tot.forEach((v,i)=>{line+=(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)});
+  s+=`<path d="${line} L${X(n-1)} ${Y(0)} L${X(0)} ${Y(0)} Z" fill="#ff4f79" fill-opacity=".14"/>`;
+  s+=`<path d="${line}" fill="none" stroke="#ff4f79" stroke-width="2" stroke-linejoin="round"/>`;
+  const key=$('#climbKey');let k=0;
+  PERDAY.forEach((p,i)=>{if(EV[p[0]]){k++;s+=`<circle cx="${X(i)}" cy="${Y(tot[i])}" r="9" fill="#ff4f79" stroke="#fffdf8" stroke-width="2"/><text x="${X(i)}" y="${Y(tot[i])+3.5}" text-anchor="middle" style="fill:#fff;font-weight:700">${k}</text>`;key.insertAdjacentHTML('beforeend',`<li><b>${k}</b><span>${dlabel(p[0])} · ${EV[p[0]]}</span></li>`)}});
+  s+=`<line id="cx" x1="0" x2="0" y1="${t}" y2="${Y(0)}" stroke="#16213e" stroke-width="1" stroke-dasharray="3 3" opacity="0"/><circle id="cdot" r="5" fill="#16213e" stroke="#fffdf8" stroke-width="2" opacity="0"/>`;
+  s+=`<rect x="${l}" y="${t}" width="${W-l-r}" height="${H-t-b}" fill="transparent" id="chit" style="cursor:crosshair"/></svg><div class="tip" id="ctip"></div>`;
+  box.innerHTML=s;
+  const svg=box.querySelector('svg'),cx=$('#cx'),cdot=$('#cdot'),tip=$('#ctip');
+  function move(ev){const R=svg.getBoundingClientRect(),sx=(ev.clientX-R.left)*W/R.width;const i=clamp(Math.round((sx-l)/(W-l-r)*(n-1)),0,n-1);const x=X(i),y=Y(tot[i]);cx.setAttribute('x1',x);cx.setAttribute('x2',x);cx.setAttribute('opacity',1);cdot.setAttribute('cx',x);cdot.setAttribute('cy',y);cdot.setAttribute('opacity',1);
+    const p=PERDAY[i];tip.innerHTML=`${dlabel(p[0])} · <b>${fmt(tot[i])}</b> messages${EV[p[0]]?'<br>'+EV[p[0]]:''}`;tip.style.left=clamp(x*R.width/W,70,R.width-70)+'px';tip.style.top=(y*R.height/H)+'px';tip.style.opacity=1}
+  const hit=$('#chit');hit.addEventListener('pointermove',move);hit.addEventListener('pointerdown',move);hit.addEventListener('pointerleave',()=>{tip.style.opacity=0;cx.setAttribute('opacity',0);cdot.setAttribute('opacity',0)});
+})();
+(function hours(){
+  const box=$('#hours');if(!box||!HOURS.length)return;
+  const W=340,H=180,l=30,r=6,t=10,b=22,maxV=6000,bw=(W-l-r)/24;
+  const Y=v=>t+(1-v/maxV)*(H-t-b);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Messages par heure, pic à 21 heures">`;
+  [0,2000,4000,6000].forEach(v=>{s+=`<line x1="${l}" x2="${W-r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e3e8f2"/><text x="${l-5}" y="${Y(v)+3}" text-anchor="end">${v?v/1000+'k':'0'}</text>`});
+  HOURS.forEach((v,h)=>{const x=l+h*bw+1,y=Y(v),hh=Math.max(0,Y(0)-y);const fc=h===21?'#ff4f79':'#16213e',fo=h===21?1:.78;s+=hh<4?`<rect x="${x}" y="${y}" width="${bw-2}" height="${hh}" fill="${fc}" fill-opacity="${fo}"/>`:`<path d="M${x} ${Y(0)} V${y+3} q0 -3 3 -3 h${bw-8} q3 0 3 3 V${Y(0)} Z" fill="${fc}" fill-opacity="${fo}"/>`;
+    if(h%6===0||h===21)s+=`<text x="${x+(bw-2)/2}" y="${H-7}" text-anchor="middle" style="${h===21?'fill:#ff4f79;font-weight:700':''}">${h}h</text>`;
+    s+=`<rect class="hb" data-h="${h}" x="${l+h*bw}" y="${t}" width="${bw}" height="${H-t-b}" fill="transparent"/>`});
+  s+=`</svg><div class="tip" id="htip"></div>`;box.innerHTML=s;
+  const svg=box.querySelector('svg'),tip=$('#htip');
+  $$('.hb',box).forEach(rc=>{const show=()=>{const h=+rc.dataset.h,R=svg.getBoundingClientRect();tip.innerHTML=`${h}h–${h+1}h · <b>${fmt(HOURS[h])}</b> messages`;tip.style.left=clamp((l+h*bw+bw/2)*R.width/W,70,R.width-70)+'px';tip.style.top=(Y(HOURS[h])*R.height/H)+'px';tip.style.opacity=1};rc.addEventListener('pointerenter',show);rc.addEventListener('pointerdown',show);rc.addEventListener('pointerleave',()=>tip.style.opacity=0)});
+})();
+(function emo(){
+  const E=[['😂',14255],['🤣',7415],['🥰',3518],['😅',1633],['😆',1357],['🫠',1344],['🤪',1068],['🤭',976]];
+  const box=$('#emo');box.innerHTML=E.map(([e,v])=>`<div class="emo-row"><span aria-hidden="true">${e}</span><i data-w="${v/E[0][1]*100}"></i><span>${fmt(v)}</span></div>`).join('');
+  const o=new IntersectionObserver(es=>{if(es[0].isIntersecting){$$('i',box).forEach(i=>i.style.width=i.dataset.w+'%');o.disconnect()}},{threshold:.3});o.observe(box);
+})();
+
+/* ================= CHAT CHIPS + LIGHTBOX ================= */
+$$('.chip').forEach(b=>b.addEventListener('click',()=>{const box=b.nextElementSibling,open=box.hidden;box.hidden=!open;b.setAttribute('aria-expanded',open);b.textContent=open?'Fermer la pépite':'Voir la pépite 💬';if(open){box.classList.remove('pop');void box.offsetWidth;box.classList.add('pop');sfx.pop()}}));
+function lightbox(src,cap){const d=document.createElement('div');d.className='lightbox';d.setAttribute('role','dialog');d.setAttribute('aria-label','Photo');d.innerHTML=`<button class="btn small" aria-label="Fermer">✕ Fermer</button><div style="text-align:center;max-width:100%"><img src="${src}" alt=""><p></p></div>`;$('p',d).textContent=cap||'';$('img',d).alt=cap||'Photo';document.body.appendChild(d);const close=()=>{d.remove();removeEventListener('keydown',esc)};const esc=e=>{if(e.key==='Escape')close()};addEventListener('keydown',esc);d.addEventListener('click',e=>{if(e.target===d||e.target.closest('button'))close()});$('button',d).focus()}
+$$('.photos figure').forEach(f=>{f.tabIndex=0;f.setAttribute('role','button');const open=()=>lightbox($('img',f).getAttribute('src'),$('figcaption',f)?.textContent);f.addEventListener('click',open);f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}})});
+
+/* ================= MAP ================= */
+(function map(){
+  const wrap=$('#mapWrap');if(!wrap)return;
+  const LON0=.5,LAT1=53.6,KX=111.1,KY=174.7,W=1000,H=1013;
+  const P=(lat,lon)=>[((lon-LON0)*KX).toFixed(1),((LAT1-lat)*KY).toFixed(1)];
+  const poly=pts=>pts.map((p,i)=>(i?'L':'M')+P(p[0],p[1]).join(' ')).join('')+'Z';
+  const line=pts=>pts.map((p,i)=>(i?'L':'M')+P(p[0],p[1]).join(' ')).join('');
+  const coast=[[49.87,.71],[49.93,1.08],[50.06,1.37],[50.2,1.55],[50.4,1.56],[50.52,1.58],[50.73,1.6],[50.87,1.58],[50.96,1.85],[51.05,2.37],[51.1,2.58],[51.23,2.92],[51.33,3.2],[51.37,3.37],[51.55,3.45],[51.65,3.7],[51.75,3.85],[51.85,4.0],[51.98,4.1],[52.08,4.25],[52.25,4.42],[52.46,4.56],[52.7,4.63],[52.95,4.73],[52.94,5.05],[53.08,5.33],[53.18,5.4],[53.4,5.9],[53.45,6.8],[53.55,7.1],[53.6,8.0],[53.6,9.6],[47.7,9.6],[47.7,.4],[49.75,.4]];
+  const uk=[[53.0,.4],[52.95,1.2],[52.75,1.65],[52.48,1.75],[52.3,1.65],[51.95,1.35],[51.75,1.1],[51.55,.8],[51.48,.95],[51.39,1.38],[51.33,1.42],[51.22,1.4],[51.13,1.31],[51.08,1.17],[50.91,.98],[50.85,.57],[50.8,.4]];
+  const texel=[[53.0,4.72],[53.05,4.7],[53.18,4.85],[53.12,4.92],[53.02,4.8]];
+  const be=[[51.09,2.55],[50.81,2.63],[50.8,3.12],[50.72,3.25],[50.5,3.6],[50.35,4.03],[50.25,4.15],[50.02,4.17],[49.97,4.4],[50.14,4.83],[49.8,4.88],[49.79,5.1],[49.55,5.47],[49.5,5.82],[49.75,5.75],[50.13,6.13],[50.37,6.4],[50.62,6.02],[50.76,6.02],[50.75,5.69],[51.1,5.8],[51.25,5.5],[51.33,5.1],[51.45,4.85],[51.42,4.42],[51.35,4.24],[51.3,3.8],[51.37,3.37]];
+  const nlde=[[50.76,6.02],[51.05,6.08],[51.25,6.2],[51.5,6.1],[51.8,5.95],[51.85,6.75],[52.1,6.95],[52.45,7.05],[52.65,6.7],[53.2,7.2],[53.3,7.2]];
+  const lux=[[49.5,5.82],[49.47,6.36],[49.73,6.5],[50.13,6.13]];
+  const frde=[[49.47,6.36],[49.2,6.9],[49.1,7.6],[48.97,8.2],[48.6,7.8],[48.0,7.6],[47.7,7.55]];
+  const PLACES=[
+    {id:'EBCI',lat:50.4592,lon:4.4538,k:'base',t:'EBCI · Charleroi',d:'Notre base, « Charlouze ». Tes T&amp;G avec deux Ryanair qui attendent, nos départs pour Texel, le night dating et Le Touquet.'},
+    {id:'EHTX',lat:53.1153,lon:4.8336,k:'flown',t:'EHTX · Texel',d:'26.06 · Notre premier vol ensemble. 40 °C au sol, 45 minutes de turbulences sous la TMA d’Amsterdam, des dunes, et « la prochaine fois c’est moi qui t’emmène ».'},
+    {id:'LFAT',lat:50.5174,lon:1.6206,k:'flown',t:'LFAT · Le Touquet',d:'04.10 · Toi aux commandes du PA28, moi en princesse. Côte d’Opale CAVOK, doudou à bord. Promesse de Texel tenue.'},
+    {id:'BXL',lat:50.8949,lon:4.3415,k:'ground',t:'Bruxelles',d:'04.10 · balade après Le Touquet. 20.10 · spotting dans le froid et l’Atomium illuminé pour ton anniversaire.'},
+    {id:'WTL',lat:50.69,lon:4.50,k:'ground',t:'Waterloo &amp; Louvain-la-Neuve',d:'25.10 · Resto à Waterloo à midi, puis bowling. Et deux personnes qui ne voulaient pas se lâcher.'},
+    {id:'EBNM',lat:50.487,lon:4.7685,k:'ground',t:'EBNM · Namur',d:'L’autre base de la BAS. Ta cachette secrète de Nesquik. La brasserie de l’aérodrome avec ta marraine (13.10).'},
+    {id:'EDRK',lat:50.3253,lon:7.5289,k:'plan',t:'EDRK · Koblenz',d:'Le plan B du 20.06 (« je te propose un aller-retour Koblenz »), annulé pour cause de CB. On y va, juste pour un dessert.'},
+    {id:'EDRY',lat:49.3047,lon:8.4511,k:'plan',t:'EDRY · Speyer',d:'« Speyer est cool aussi, et y a un musée de l’aviation sur place. » Destination validée.'},
+    {id:'EDFC',lat:49.9389,lon:9.0639,k:'plan',t:'EDFC · Aschaffenburg',d:'20.06 : fuel indisponible pile ce jour-là. 39 °C le 25.06. On retente quand il fera moins chaud.'},
+    {id:'LFGA',lat:48.11,lon:7.359,k:'plan',t:'LFGA · Colmar',d:'20.06 : pas de fuel sans carte AirBP. On reviendra avec la carte.'},
+    {id:'EBSP',lat:50.4825,lon:5.9103,k:'plan',t:'EBSP · Spa',d:'Ton idée du 29.08 pour notre vol ensemble. Et une soirée spa promise le 11.10. Deux spas pour le prix d’un.'},
+    {id:'LFQA',lat:49.31,lon:4.05,k:'plan',t:'LFQA · Reims',d:'Ton autre idée du 29.08 (« mais la carte du resto est moins bien »). À vérifier sur place.'}
+  ];
+  const by=Object.fromEntries(PLACES.map(p=>[p.id,p]));
+  const curve=(a,b,bend)=>{const [x1,y1]=P(a.lat,a.lon).map(Number),[x2,y2]=P(b.lat,b.lon).map(Number);const mx=(x1+x2)/2,my=(y1+y2)/2,dx=x2-x1,dy=y2-y1;return `M${x1} ${y1} Q${(mx-dy*bend).toFixed(1)} ${(my+dx*bend).toFixed(1)} ${x2} ${y2}`};
+  const [cx0,cy0]=P(by.EBCI.lat,by.EBCI.lon).map(Number);
+  const routes=[{d:curve(by.EBCI,by.EHTX,.12),id:'EHTX'},{d:curve(by.EBCI,by.LFAT,-.15),id:'LFAT'},{d:`M${cx0} ${cy0} c 40 -50 120 -40 110 20 s -90 60 -110 -20`,id:'NIGHT'}];
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte de nos vols entre la Belgique, les Pays-Bas, la France et l'Allemagne">`;
+  s+=`<defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#16213e" stroke-opacity=".05" stroke-width="2"/></pattern></defs>`;
+  s+=`<rect width="${W}" height="${H}" fill="#cfe3f7"/>`;
+  for(let gx=0;gx<=9;gx++){const [x]=P(50,LON0+gx);s+=`<line x1="${x}" x2="${x}" y1="0" y2="${H}" stroke="#16213e" stroke-opacity=".08"/>`}
+  for(let gy=48;gy<=53;gy++){const [,y]=P(gy,1);s+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="#16213e" stroke-opacity=".08"/><text x="6" y="${+y-4}" style="font-size:16px;fill:#16213e;opacity:.4;font-family:Space Mono,monospace">N${gy}°</text>`}
+  s+=`<path d="${poly(coast)}" fill="#f6f1e4" stroke="#16213e" stroke-width="2"/><path d="${poly(coast)}" fill="url(#hatch)"/>`;
+  s+=`<path d="${poly(uk.concat([[53.6,.4]]))}" fill="#f6f1e4" stroke="#16213e" stroke-width="2"/><path d="${poly(texel)}" fill="#f6f1e4" stroke="#16213e" stroke-width="2"/>`;
+  [be,nlde,lux,frde].forEach(b=>{s+=`<path d="${line(b)}" fill="none" stroke="#16213e" stroke-opacity=".45" stroke-width="2" stroke-dasharray="10 6"/>`});
+  const lab=(txt,lat,lon,size,op)=>{const [x,y]=P(lat,lon);return `<text x="${x}" y="${y}" text-anchor="middle" style="font-family:Space Mono,monospace;font-size:${size}px;letter-spacing:.2em;fill:#16213e;opacity:${op}">${txt}</text>`};
+  s+=lab('BELGIQUE',50.12,5.25,22,.35)+lab('FRANCE',49.0,3.2,26,.3)+lab('PAYS-BAS',52.35,5.6,22,.3)+lab('ALLEMAGNE',51.2,8.1,24,.3)+lab('LUX.',49.82,6.12,14,.35)+lab('MER DU NORD',52.6,2.8,24,.45)+lab('MANCHE',50.25,.95,18,.45)+lab('UK',52.2,.8,20,.35);
+  routes.forEach(r=>{s+=`<path class="route" data-r="${r.id}" d="${r.d}" fill="none" stroke="#ff4f79" stroke-width="5" stroke-linecap="round"/>`});
+  PLACES.filter(p=>p.k==='plan').forEach(p=>{s+=`<path d="${curve(by.EBCI,p,.08)}" fill="none" stroke="#4f5a7a" stroke-width="2.5" stroke-dasharray="8 8" opacity=".7"/>`});
+  const [kx,ky]=P(47.86,8.6);s+=`<g transform="translate(${kx} ${ky})"><text x="0" y="0" text-anchor="middle" style="font-family:Space Mono,monospace;font-size:16px;fill:#16213e">↓ Corse</text><text x="0" y="20" text-anchor="middle" style="font-family:Space Mono,monospace;font-size:13px;fill:#4f5a7a">850 km, un jour</text></g>`;
+  const [sx,sy]=P(47.95,1.0);s+=`<g transform="translate(${sx} ${sy})"><line x1="0" y1="0" x2="145.5" y2="0" stroke="#16213e" stroke-width="4"/><line x1="0" y1="-8" x2="0" y2="8" stroke="#16213e" stroke-width="3"/><line x1="145.5" y1="-8" x2="145.5" y2="8" stroke="#16213e" stroke-width="3"/><text x="72" y="-12" text-anchor="middle" style="font-family:Space Mono,monospace;font-size:15px;fill:#16213e">50 NM</text></g>`;
+  const [rx,ry]=P(53.25,8.7);s+=`<g transform="translate(${rx} ${ry})"><circle r="38" fill="#fffdf8" stroke="#16213e" stroke-width="2"/><path d="M0 -34 L8 0 L0 34 L-8 0Z" fill="#16213e"/><path d="M0 -34 L8 0 L-8 0Z" fill="#ff4f79"/><text y="-44" text-anchor="middle" style="font-family:Space Mono,monospace;font-size:15px;font-weight:700;fill:#16213e">N</text></g>`;
+  PLACES.forEach(p=>{const [x,y]=P(p.lat,p.lon);const vis=p.k==='flown'?`<circle r="11" fill="#ff4f79" stroke="#16213e" stroke-width="3"/>`:p.k==='base'?`<circle r="14" fill="#16213e"/><circle r="6" fill="#ffb238"/>`:p.k==='ground'?`<circle r="9" fill="#ffb238" stroke="#16213e" stroke-width="3"/>`:`<circle r="9" fill="#fffdf8" stroke="#16213e" stroke-width="3" stroke-dasharray="4 3"/>`;
+    const ldx=16,anchor=['WTL','EDFC','EBCI'].includes(p.id)?'end':'start',ldy=p.id==='BXL'?-12:p.id==='WTL'?-6:p.id==='EBNM'?28:p.id==='EBCI'?30:8;
+    s+=`<g class="pin" tabindex="0" role="button" aria-label="${p.t.replace(/&amp;/g,'et')}" data-id="${p.id}" transform="translate(${x} ${y})"><circle class="hit" r="24" fill="transparent"/>${vis}<text x="${anchor==='end'?(p.id==='EBCI'?-6:-16):ldx}" y="${ldy}" text-anchor="${anchor}" style="font-family:Space Mono,monospace;font-size:24px;font-weight:700;fill:#16213e;paint-order:stroke;stroke:#fffdf8;stroke-width:5px">${p.id.length===4?p.id:p.t.split(' ')[0].replace('&amp;','&')}</text></g>`});
+  s+=`<g id="mplane" opacity="0"><circle r="16" fill="#16213e"/><text y="6" text-anchor="middle" style="font-size:18px">✈️</text></g></svg>`;
+  wrap.innerHTML=s;
+  const info=$('#mapInfo');
+  const show=id=>{const p=by[id];if(!p)return;info.innerHTML=`<h4>${p.t}</h4><p>${p.d}</p>`;$$('.pin',wrap).forEach(g=>g.style.opacity=g.dataset.id===id?1:.75);info.classList.remove('pop');void info.offsetWidth;info.classList.add('pop');sfx.pop()};
+  $$('.pin',wrap).forEach(g=>{g.addEventListener('click',()=>show(g.dataset.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();show(g.dataset.id)}})});
+  const paths=$$('.route',wrap),plane=$('#mplane',wrap);
+  paths.forEach(p=>{const L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=0});
+  let playing=false;
+  $('#replay').addEventListener('click',async()=>{
+    if(playing)return;playing=true;
+    const texts={EHTX:'26.06 · EBCI → EHTX. Notre premier vol.',NIGHT:'29.09 · Vol local, sunset puis nuit. Le night dating.',LFAT:'04.10 · EBCI → LFAT. Toi aux commandes.'};
+    const order=['EHTX','NIGHT','LFAT'];
+    paths.forEach(p=>p.style.strokeDashoffset=p.getTotalLength());
+    for(const id of order){
+      const p=paths.find(x=>x.dataset.r===id),L=p.getTotalLength();
+      info.innerHTML=`<h4>Rejouer nos vols</h4><p>${texts[id]}</p>`;
+      if(reduce){p.style.strokeDashoffset=0;continue}
+      plane.setAttribute('opacity',1);
+      await new Promise(res=>{const t0=performance.now(),dur=1800;const st=t=>{const k=clamp((t-t0)/dur,0,1),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;const pt=p.getPointAtLength(L*e);plane.setAttribute('transform',`translate(${pt.x} ${pt.y})`);p.style.strokeDashoffset=L*(1-e);if(k<1)requestAnimationFrame(st);else res()};requestAnimationFrame(st)});
+      await new Promise(r=>setTimeout(r,500));
+    }
+    plane.setAttribute('opacity',0);playing=false;info.innerHTML=`<h4>Et ensuite ?</h4><p>Trois vols ensemble en quatre mois. Les points en pointillés attendent leur tour.</p>`;
+  });
+})();
+
+/* ================= GAME TABS ================= */
+const tabs=$$('#gameTabs button');
+tabs.forEach(b=>b.addEventListener('click',()=>{tabs.forEach(x=>{x.setAttribute('aria-selected',x===b);$('#'+x.dataset.g).hidden=x!==b});if(b.dataset.g==='g-butter')sizeGame();if(b.dataset.g==='g-scratch')initScratch()}));
+
+/* ================= GAME: ABSOLUTE BUTTER ================= */
+const cv=$('#game'),ctx=cv.getContext('2d'),verdict=$('#verdict'),bestEl=$('#best');
+let GW=0,GH=280,state='idle',pl=null,hold=false,last=0,level=0,gust=0;
+let best=store.get('nr_best_lv',[null,null,null]);
+const LV=['CAVOK','Rafales','Nuit'];
+function showBest(){const b=best[level];bestEl.textContent=b!=null?'Meilleur toucher ('+LV[level]+') : '+b+' ft/min':''}
+function sizeGame(){const r=cv.getBoundingClientRect();if(!r.width)return;const dpr=Math.min(2,devicePixelRatio||1);GW=r.width;cv.width=GW*dpr;cv.height=GH*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
+const ground=()=>GH-42,rwyA=()=>GW*.5,rwyB=()=>GW*.93,vxOf=()=>Math.max(70,GW/6.2);
+function resetGame(){pl={x:30,y:52,vy:28};state='fly';gust=0;say('En approche… gère tes gaz.');last=performance.now();requestAnimationFrame(loop)}
+function loop(now){
+  if(state!=='fly')return;
+  const dt=Math.min(.04,(now-last)/1000);last=now;
+  pl.x+=vxOf()*dt;
+  pl.vy+=(hold?-85:42)*dt;
+  if(level===1){gust+=(Math.random()-.5)*260*dt;gust*=.97;pl.vy+=gust*dt*2.2}
+  pl.vy=clamp(pl.vy,-55,125);pl.y+=pl.vy*dt;
+  if(pl.y<20){pl.y=20;pl.vy=Math.max(pl.vy,0)}
+  if(pl.y>=ground()){pl.y=ground();land();draw();return}
+  if(pl.x>GW+20){state='done';say('Tu as survolé toute la piste. Remise de gaz !','La tour de Charleroi te remet dans le circuit. Les Ryanair soupirent.');sfx.ko();draw();return}
+  draw();requestAnimationFrame(loop);
+}
+const fpm=()=>Math.round(pl.vy*7.5);
+function say(a,b){verdict.innerHTML=a+(b?'<small>'+b+'</small>':'')}
+function land(){
+  state='done';const v=fpm();
+  if(pl.x<rwyA()){say('Atterrissage dans les champs 🌾','Posé à moitié dans l’herbe, comme un certain pote à moi. On retente ?');sfx.ko();return}
+  if(pl.x>rwyB()){say('Piste trop courte 😬','Fin de piste dépassée. Le gars du fuel ne viendra pas te chercher avant 22h.');sfx.ko();return}
+  if(v<=150){say('ABSOLUTE BUTTER 🧈 ('+v+' ft/min)','Les deux Ryanair applaudissent. Le doudou n’a rien senti.');sfx.chime();const [x,y]=centerOf(cv);hearts(x,y,18)}
+  else if(v<=420){say('Joli atterrissage ✈️ ('+v+' ft/min)','Un peu ferme, mais ton examinateur ferait un petit sourire. Presque.');sfx.ok()}
+  else{say('BOUM. ('+v+' ft/min)','Le grand P l’a senti depuis la maison. Le training file s’en souviendra.');sfx.ko()}
+  if(best[level]==null||v<best[level]){best[level]=v;store.set('nr_best_lv',best);showBest()}
+}
+function draw(){
+  if(!GW)return;const nightL=level===2;
+  const g=ctx.createLinearGradient(0,0,0,GH);
+  if(nightL){g.addColorStop(0,'#030716');g.addColorStop(1,'#0e1a44')}else{g.addColorStop(0,'#1d2c6b');g.addColorStop(.7,'#c0587a');g.addColorStop(1,'#ff9a6b')}
+  ctx.fillStyle=g;ctx.fillRect(0,0,GW,GH);
+  if(nightL){ctx.fillStyle='#fff';for(let i=0;i<40;i++){const x=(i*97)%GW,y=(i*53)%(GH-80);ctx.fillRect(x,y,1.5,1.5)}}
+  else{ctx.fillStyle='#ffd27a';ctx.beginPath();ctx.arc(GW*.82,ground()-6,26,Math.PI,0);ctx.fill()}
+  ctx.fillStyle=nightL?'#06100a':'#24452f';ctx.fillRect(0,ground(),GW,GH-ground());
+  ctx.fillStyle=nightL?'#14161c':'#3a3f4b';ctx.fillRect(rwyA(),ground(),rwyB()-rwyA(),14);
+  if(!nightL){ctx.fillStyle='#fff';for(let x=rwyA()+30;x<rwyB()-20;x+=26)ctx.fillRect(x,ground()+6,13,2);for(let i=0;i<4;i++)ctx.fillRect(rwyA()+4,ground()+2+i*3,14,1.5);ctx.font='bold 10px "Space Mono", monospace';ctx.fillText('25',rwyA()+20,ground()+11)}
+  ctx.fillStyle='#ffb238';for(let x=rwyA();x<=rwyB();x+=18){ctx.beginPath();ctx.arc(x,ground(),nightL?2.4:1.8,0,7);ctx.fill()}
+  ctx.fillStyle='#4cff7a';ctx.beginPath();ctx.arc(rwyA(),ground()+7,3,0,7);ctx.fill();ctx.fillStyle='#ff3b3b';ctx.beginPath();ctx.arc(rwyB(),ground()+7,3,0,7);ctx.fill();
+  ['#fff','#fff','#ff4f79','#ff4f79'].forEach((c,i)=>{ctx.fillStyle=c;ctx.beginPath();ctx.arc(rwyA()-24+i*7,ground()-4,2.5,0,7);ctx.fill()});
+  ctx.fillStyle=nightL?'#2a3350':'#f3f6ff';[GW*.95,GW*.985].forEach(x=>{ctx.fillRect(x-14,ground()-24,22,5);ctx.fillRect(x-4,ground()-28,4,13)});
+  if(pl){
+    const ang=Math.atan2(pl.vy,vxOf());ctx.save();ctx.translate(pl.x,pl.y-6);ctx.rotate(ang*.8);
+    ctx.fillStyle=nightL?'#9aa6c4':'#fffdf8';ctx.beginPath();ctx.ellipse(0,0,20,4.5,0,0,7);ctx.fill();ctx.fillRect(-4,-1.5,10,3);
+    ctx.beginPath();ctx.moveTo(-18,-2);ctx.lineTo(-23,-11);ctx.lineTo(-19,-11);ctx.lineTo(-13,-2);ctx.fill();
+    ctx.fillStyle='#ff4f79';ctx.fillRect(-14,-.5,26,1.5);ctx.fillStyle='#16213e';ctx.fillRect(4,-3.5,6,2.5);
+    if(nightL){ctx.fillStyle='#ff3b3b';ctx.beginPath();ctx.arc(-2,3,2,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(20,0,2,0,7);ctx.fill();ctx.fillStyle='rgba(255,255,220,.15)';ctx.beginPath();ctx.moveTo(20,0);ctx.lineTo(90,-14);ctx.lineTo(90,18);ctx.fill()}
+    if(hold&&state==='fly'){ctx.fillStyle='rgba(255,178,56,.9)';ctx.beginPath();ctx.arc(21,0,3,0,7);ctx.fill()}
+    ctx.restore();
+    ctx.fillStyle='#fff';ctx.font='bold 12px "Space Mono", monospace';const v=fpm();
+    ctx.fillText('VS '+(v>0?'-':'+')+Math.abs(v)+' ft/min',10,18);ctx.fillText('ALT '+Math.max(0,Math.round((ground()-pl.y)*6))+' ft',10,34);ctx.fillText(hold?'GAZ ▲':'RÉDUIT ▼',10,50);
+    if(level===1){ctx.fillText('VENT '+(gust>0?'↓':'↑')+' '+Math.abs(Math.round(gust/4))+' kt',10,66)}
+  }else{ctx.fillStyle='#fff';ctx.font='bold 13px "Space Mono", monospace';ctx.fillText('EBCI · RWY 25 · '+LV[level],10,20)}
+}
+const th=$('#throttle'),gwrap=$('#gameWrap');
+const onP=e=>{if(e.cancelable)e.preventDefault();hold=true;if(state!=='fly')resetGame()},offP=()=>{hold=false};
+[th,gwrap].forEach(el=>{el.addEventListener('pointerdown',onP);el.addEventListener('pointerup',offP);el.addEventListener('pointerleave',offP);el.addEventListener('pointercancel',offP)});
+addEventListener('keydown',e=>{if(e.code!=='Space')return;const tag=(document.activeElement&&document.activeElement.tagName)||'';if(/INPUT|TEXTAREA|BUTTON/.test(tag))return;const r=cv.getBoundingClientRect();if(r.width&&r.top<innerHeight&&r.bottom>0){e.preventDefault();hold=true;if(state!=='fly')resetGame()}});
+addEventListener('keyup',e=>{if(e.code==='Space')hold=false});
+$('#restart').addEventListener('click',resetGame);
+$$('#lvl button').forEach(b=>b.addEventListener('click',()=>{$$('#lvl button').forEach(x=>x.setAttribute('aria-pressed',x===b));level=+b.dataset.l;state='idle';pl=null;showBest();say('Niveau '+LV[level]+'. Appuie sur « Nouvelle approche ».');draw()}));
+addEventListener('resize',sizeGame);showBest();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(sizeGame);sizeGame();
+
+/* ================= GAME: MEMORY ================= */
+const MEM=[['texel','Texel'],['touquet','Le Touquet'],['sunsetselfie','Night dating'],['atomium','Atomium'],['bowling','Bowling'],['spotting','Spotting'],['doudou','Doudou'],['flowers','Fleurs']];
+let mFirst=null,mLock=false,mMoves=0,mPairs=0;
+function memInit(){
+  const cards=MEM.concat(MEM).map(x=>x.slice()).sort(()=>Math.random()-.5);
+  mFirst=null;mLock=false;mMoves=0;mPairs=0;$('#memMsg').textContent='';memStat();
+  $('#memory').innerHTML=cards.map(([k,l])=>`<button class="mcard" data-k="${k}" aria-label="Carte cachée"><span class="in"><span class="face back">NR</span><span class="face front"><img src="img/${k}.jpg" alt="${l}" loading="lazy"></span></span></button>`).join('');
+  $$('#memory .mcard').forEach(c=>c.addEventListener('click',()=>memFlip(c)));
+}
+function memStat(){$('#memStat').textContent='Coups : '+mMoves+' · Paires : '+mPairs+'/8'}
+function memFlip(c){
+  if(mLock||c.classList.contains('up')||c.classList.contains('done'))return;
+  c.classList.add('up');c.setAttribute('aria-label',$('img',c).alt);sfx.pop();
+  if(!mFirst){mFirst=c;return}
+  mMoves++;const a=mFirst;mFirst=null;
+  if(a.dataset.k===c.dataset.k){a.classList.add('done');c.classList.add('done');mPairs++;sfx.ok();
+    if(mPairs===8){$('#memMsg').innerHTML='8 paires en '+mMoves+' coups. '+(mMoves<=12?'Mémoire de pilote : exceptionnelle.':mMoves<=18?'Mémoire de pilote : validée.':'Validé quand même. On révisera ensemble.')+'<small>Chaque photo est un vrai souvenir du carnet.</small>';sfx.chime();const [x,y]=centerOf($('#memory'));hearts(x,y,20)}}
+  else{mLock=true;setTimeout(()=>{a.classList.remove('up');c.classList.remove('up');a.setAttribute('aria-label','Carte cachée');c.setAttribute('aria-label','Carte cachée');mLock=false},850)}
+  memStat();
+}
+$('#memReset').addEventListener('click',memInit);memInit();
+
+/* ================= GAME: NOTAM HUNT ================= */
+const NOTAMS=['PAS DE FUEL SANS CARTE AIRBP','FUEL INDISPO EDFC','TSRAGR BKN060CB','PLAFOND 300 FT LILLE','LE TRÉPORT : NOTAM','PAPA VEUT TE VOIR','MYGALE DANS LA CHAMBRE','RYANAIR IMPATIENT','TA À 25 MIN','FOREFLIGHT NE VEUT PAS','IPAD OUBLIÉ','CAMÉRA PAS ENCLENCHÉE','GARS DU FUEL : 22H','PROB40 TEMPO','PAPA DIT NON POUR LA VOITURE'];
+const HEARTS=['❤️','🥰','💋','🧸','🫶'];
+const grid=$('#notamGrid');grid.innerHTML=Array.from({length:9},(_,i)=>`<button class="hole" data-i="${i}" aria-label="Case ${i+1}"><span class="pop-item"></span></button>`).join('');
+const holes=$$('.hole',grid);let nScore=0,nTime=30,nRun=false,nSpawn=null,nClock=null;
+function nEnd(){nRun=false;clearInterval(nSpawn);clearInterval(nClock);holes.forEach(h=>{h.classList.remove('up');clearTimeout(h._t)});$('#nStart').disabled=false;$('#nStart').textContent='Rejouer';
+  const m=nScore>=30?['CAVOK pour nous deux ☀️','Plus aucun NOTAM entre nous. Décollage autorisé.']:nScore>=18?['Bien joué, Foreflight t’adore','Quelques NOTAMs ont survécu, rien de grave.']:['Les NOTAMs ont gagné cette fois','Plans Z ? On retente.'];
+  $('#nMsg').innerHTML=m[0]+' ('+nScore+' points)<small>'+m[1]+'</small>';if(nScore>=18){sfx.chime();const [x,y]=centerOf(grid);hearts(x,y,16)}}
+function nPop(){const free=holes.filter(h=>!h.classList.contains('up'));if(!free.length)return;const h=free[Math.floor(Math.random()*free.length)];const heart=Math.random()<.25;const it=$('.pop-item',h);it.className='pop-item '+(heart?'heartc':'notam');it.textContent=heart?HEARTS[Math.floor(Math.random()*HEARTS.length)]:NOTAMS[Math.floor(Math.random()*NOTAMS.length)];h.dataset.t=heart?'h':'n';h.classList.remove('hit');h.classList.add('up');clearTimeout(h._t);h._t=setTimeout(()=>h.classList.remove('up'),1000+Math.random()*500)}
+holes.forEach(h=>h.addEventListener('pointerdown',e=>{e.preventDefault();if(!nRun||!h.classList.contains('up'))return;nScore+=h.dataset.t==='h'?3:1;$('#nScore').textContent=nScore;h.classList.add('hit');h.classList.remove('up');clearTimeout(h._t);h.dataset.t==='h'?sfx.ok():sfx.pop()}));
+$('#nStart').addEventListener('click',()=>{if(nRun)return;nRun=true;nScore=0;nTime=30;$('#nScore').textContent=0;$('#nTime').textContent=30;$('#nMsg').textContent='';$('#nStart').disabled=true;nSpawn=setInterval(nPop,560);nClock=setInterval(()=>{nTime--;$('#nTime').textContent=nTime;if(nTime<=0)nEnd()},1000);nPop()});
+
+/* ================= GAME: NATO ================= */
+const NATO=[['TU',['Tango','Uniform']],['ES',['Echo','Sierra']],['MA',['Mike','Alfa']],['COPILOTE',['Charlie','Oscar','Papa','India','Lima','Oscar','Tango','Echo']]];
+const natoBox=$('#nato');
+natoBox.innerHTML=NATO.map(([w,c],i)=>`<div class="nato-word" data-w="${w}"><div class="nato-codes">${c.join(' · ')}</div><input id="nato${i}" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="${w.length+4}" placeholder="${'_ '.repeat(w.length).trim()}" aria-label="Mot ${i+1} décodé"><button class="btn ghost small" data-hint="${i}">Indice</button></div>`).join('');
+const norm=s=>s.normalize('NFD').replace(/[^A-Za-z]/g,'').toUpperCase();
+$$('.nato-word',natoBox).forEach((row,i)=>{const inp=$('input',row);let hints=0;
+  inp.addEventListener('input',()=>{if(norm(inp.value)===row.dataset.w){row.classList.add('ok');inp.disabled=true;$('button',row).disabled=true;sfx.ok();if($$('.nato-word.ok',natoBox).length===NATO.length){$('#natoFinal').classList.add('show');sfx.chime();const [x,y]=centerOf($('#natoFinal'));hearts(x,y,24)}else{const nx=$$('.nato-word:not(.ok) input',natoBox)[0];nx&&nx.focus()}}});
+  $('button',row).addEventListener('click',()=>{hints=Math.min(row.dataset.w.length,hints+1);inp.placeholder=row.dataset.w.slice(0,hints)+' _'.repeat(row.dataset.w.length-hints);inp.focus()});
+});
+
+/* ================= GAME: SCRATCH ================= */
+const BONS=[['Bon pour un resto où TU paies','Je me laisserai faire. Promis.'],['Bon pour une soirée spa','Tu l’as proposée le 05.10.'],['Bon pour un karting','Tu me le réclames depuis le 11.10. J’abdique.'],['Bon pour un drive-in, film d’amour','Avant la Saint-Valentin, si on tient.'],['Bon pour un câlin de 10 minutes minimum','Comme le 09.10. Renouvelable.'],['Bon pour une nuit à regarder les étoiles','« La prochaine fois on regarde les étoiles le soir. »'],['Bon pour 2h30 de simu','Instructeur : moi. Engine failures incluses.'],['Bon pour un night dating, saison 2','Sunset, puis night, puis un verre.']];
+$('#scratch').innerHTML=BONS.map(([a,b],i)=>`<div class="ticket"><div class="under"><small>Bon de vol n°${String(i+1).padStart(3,'0')} · valable à vie</small><strong>${a}</strong><span>${b}</span></div><canvas aria-label="Zone à gratter, bon ${i+1}"></canvas></div>`).join('');
+let scratchReady=false;
+function initScratch(){
+  if(scratchReady)return;const ts=$$('.ticket');if(!ts[0]||!ts[0].getBoundingClientRect().width)return;scratchReady=true;
+  ts.forEach((t,i)=>{
+    const c=$('canvas',t),r=t.getBoundingClientRect(),dpr=Math.min(2,devicePixelRatio||1);c.width=r.width*dpr;c.height=r.height*dpr;const x=c.getContext('2d');x.scale(dpr,dpr);
+    const g=x.createLinearGradient(0,0,r.width,r.height);g.addColorStop(0,'#c9cfdb');g.addColorStop(.5,'#eef1f6');g.addColorStop(1,'#aeb6c6');x.fillStyle=g;x.fillRect(0,0,r.width,r.height);
+    x.fillStyle='rgba(22,33,62,.12)';for(let k=0;k<40;k++){x.font='16px serif';x.fillText(['✈','♥','✦'][k%3],(k*53)%r.width,(k*37)%r.height)}
+    x.fillStyle='#16213e';x.font='bold 15px "Space Mono", monospace';x.textAlign='center';x.fillText('GRATTE ICI ✈︎',r.width/2,r.height/2-4);x.font='12px "Space Mono", monospace';x.fillText('bon n°'+String(i+1).padStart(3,'0'),r.width/2,r.height/2+16);
+    x.globalCompositeOperation='destination-out';x.lineCap='round';x.lineJoin='round';x.lineWidth=34;
+    let down=false,lx=0,ly=0,moves=0;
+    const pos=e=>{const b=c.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top]};
+    const check=()=>{const d=x.getImageData(0,0,c.width,c.height).data;let cl=0,tot=0;for(let k=3;k<d.length;k+=64){tot++;if(d[k]===0)cl++}if(cl/tot>.5&&!t.classList.contains('clear')){t.classList.add('clear');sfx.chime();const [hx,hy]=centerOf(t);hearts(hx,hy,12)}};
+    c.addEventListener('pointerdown',e=>{e.preventDefault();down=true;[lx,ly]=pos(e);c.setPointerCapture&&c.setPointerCapture(e.pointerId);x.beginPath();x.arc(lx,ly,17,0,7);x.fill()});
+    c.addEventListener('pointermove',e=>{if(!down)return;const [px,py]=pos(e);x.beginPath();x.moveTo(lx,ly);x.lineTo(px,py);x.stroke();lx=px;ly=py;if(++moves%12===0)check()});
+    const up=()=>{if(down){down=false;check()}};c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);
+  });
+}
+
+/* ================= RADIO ================= */
+const Q=[
+['R','30.09','00:57','Je crois que je t’aime 🥰'],['N','30.09','00:57','Ooooh ! Mais moi aussi 🫶🏼🫶🏼🫶🏼'],
+['R','27.09','22:35','J’ai juste de la chance que tu sois.'],['R','30.09','00:41','T’es trop bien comme personne à avoir à côté de soi. C’est fou'],
+['N','30.09','00:43','Je m’éclate avec toi c’est génial 🥰🤩'],['N','30.09','00:31','Ça me booste d’être avec toi 🥰'],
+['R','27.09','22:53','Ptit cœur dans mon cœur 💞'],['N','12.09','18:47','Le cadeau c’est toiiiii 😝😁'],
+['R','19.10','06:37','Joyeux anniversaire mon petit ange aux cheveux d’or ! ✨'],['R','19.10','22:43','J’aime tout ce que tu es, ce que tu fais, ce que tu dis 💞'],
+['R','15.10','22:10','T’es mon porte-bonheur 💞'],['N','13.10','16:28','Tu es ma source d’énergie plutôt 😂🥰 pas besoin de « batterie sociale » avec toi 🫶🏼'],
+['N','05.10','21:33','T’es vraiment trop génial, je pouvais pas tomber sur quelqu’un de mieux ❤️❤️❤️'],['R','09.10','23:57','Je t’aime comme tu es, et ce que tu fais comme tu le fais ! ❤️'],
+['R','09.10','23:09','Avec tes yeux pétillants 😍'],['N','09.10','23:10','Je me sens bien avec toi 😘🫶🏼'],
+['R','11.10','12:00','Je t’aime très fort, et ça ne changera pas'],['R','10.10','21:21','Je t’aime, je t’aime, je t’aime'],
+['N','16.10','17:46','Le meilleur des cadeaux c’est d’être avec toi ❤️❤️'],['N','17.10','21:07','(mon vœu) Rester toute ma vie avec toiiii'],
+['N','20.10','23:03','Le temps passe trop vite avec toiii 🥰🥰🥰'],['N','19.10','18:55','Tu me manques déjà quand on vient de se quitter alors là ! 🤭🥰'],
+['R','25.10','09:24','Déjà que je dois mettre un harnais pour ne pas fondre dans tes yeux 😂 une corde pour m’attacher à chaque fois que je prends ta main 🥰'],
+['N','24.10','22:53','Ma chérie, choupette, ma princesse et mon ptit cœur. Ohlala, ça me fait bondir mon cœur à chaque fois 🫣🥰❤️'],
+['R','25.10','22:47','Princesse choupette 🥰😍'],['N','25.10','22:47','Hihi mon prince charmant 🤭😍'],
+['N','22.10','18:31','T’écoutes comme un pro ❤️🫶🏼 je peux te parler de tout 😘'],['N','22.10','20:38','Mais jamais de la vie j’interromps un moment avec toi pour étudier'],
+['R','08.10','21:41','Juste te voir, être avec toi et te faire plaisir ça me suffit plus qu’amplement !'],['N','07.10','18:01','Je me marre quand je suis avec toi c’est un truc de dingue 🥰🤪'],
+['R','06.10','11:16','Trop envie de partir avec toi quelque part 🫣'],['R','04.10','22:44','La prochaine fois j’lâche pas ta main de la journée 🫣'],
+['N','29.10','23:35','Juste tout simple dans tes bras 🥰🥰'],['R','29.10','23:35','Je t’aime encore plus 💞💯'],
+['R','30.10','09:29','Hier quand tu me parlais de l’école j’voulais juste m’arrêter et te prendre dans mes bras 🥰'],['N','30.10','20:41','T’es tellement chou 🥰 j’ai pas les mots tellement je t’aime ❤️🫶🏼'],
+['N','31.10','08:10','T’inquiète dans tous les cas je serai dans tes bras'],['R','01.10','20:45','100 % honnête, je suis hyper impressionné de ce que tu fais ! T’es vraiment au top ! ❤️'],
+['N','20.09','19:50','Je serai toujours là pour te soutenir et être fière de toi 🥰🥰🤩'],['N','23.09','20:01','Rien que d’être avec toi c’est parfait 🥰🥰🥰'],
+['R','17.09','09:59','J’te prends sous mon aile 🤣🥰'],['N','26.06','18:27','Et la prochaine fois c’est moi qui t’emmène'],
+['R','24.07','22:11','Et si tu veux que je vienne voler avec toi t’as intérêt à ne pas rater la piste 😂😂'],['N','25.07','18:29','J’attends encore que la personne qui m’intéresse fasse un pas 🤫🫣'],
+['R','16.09','20:01','Mike Oscar Roméo Tango'],['N','20.06','22:46','😂 c’est un signe de l’univers'],
+['R','12.09','21:17','Night dating 😂 pas mal'],['N','09.10','22:52','La prochaine fois c’est moi qui paye t’es insupportable 😫😂'],
+['N','30.09','10:44','Premier bisou de ma vie 🫣'],['N','19.09','23:43','J’ai des papillons 🦋 dans le ventre depuis que t’es venu me chercher 🫣'],
+['N','14.10','22:41','Fais de beaux rêves où l’on plane ensemble au-dessus des nuages ☁️'],['N','14.10','22:27','Tu me les as mis de partout les papillons quand tu as pris ma main dans la voiture 🥰🥰'],
+['N','13.10','20:17','Je suis encore plus amoureuse de toi à chaque fois 🤭🫣🥰'],['R','16.10','11:21','J’veux te faire vivre la meilleure relation amoureuse possible 🩷'],
+['N','16.10','21:26','Hihi je fais rien, je suis juste amoureuse 😍❤️🥰'],['N','16.10','20:55','Pffff moi en 2 secondes j’étais amoureuse hein'],
+['R','21.10','08:48','Mooooh mon petit cœur rempli de mignonnerie 🥰🥰'],['N','21.10','10:04','T’es littéralement le mec parfait dont toutes les filles rêvent 🥰🥹'],
+['R','21.10','10:07','T’es littéralement la fille parfaite dont tous les mecs rêvent 🥰🥰'],['N','22.10','20:41','Je pensais pas qu’un mec pouvait être amoureux comme ça moiii 🥰'],
+['R','22.10','18:31','Je t’ai déjà dit que t’étais parfaite ? 💫'],['N','24.10','08:48','Je m’imaginais bien me réveiller dans tes bras ce matin 🫣🥰'],
+['R','24.10','22:59','Je t’aime très très fort 🥰 retiens-le 🤭'],['N','06.10','22:21','Je suis plus câlins que bisous en plus 🙈😂🥰'],
+['N','07.10','16:53','Je meurs d’envie de te serrer dans mes bras à chaque fois 🥰'],['R','07.10','21:25','Quand t’aimes quelqu’un tu ressens ce qu’il ressent ❤️'],
+['N','29.10','23:39','Tous tes bisous je meurrrrs, j’aime trop être collée à toi'],['R','29.10','23:47','Je te fais tous les bisous du monde 🥰🤭😘'],
+['N','10.10','00:08','Bonne nuit mon chouuu ❤️ Fais de beaux rêves (de moi hein 😆🥰)'],['R','30.10','21:43','J’aimerais tellement te tenir dans mes bras là'],
+['N','30.10','07:08','Tes bras me manquent ! Avec tes bisous aussi 🥰'],['R','15.10','22:09','J’te fais un câlin de toutes mes forces 🥰🩷'],
+['N','15.10','20:56','Nos câlins sont trop courts hein, jamais assez longs à mon goût 🫣🥰'],['N','20.10','22:56','Arrrh purée je me remets pas de tes câlins 😝🤭🥰'],
+['R','27.10','21:13','Je t’adore ma petite nougatine 🥰'],['N','10.10','21:03','Mon papa : « franchement pour un premier amoureux, c’est spot on »']
+];
+let rFilter='all',rIdx=-1;
+const rList=()=>Q.map((q,i)=>i).filter(i=>rFilter==='all'||Q[i][0]===rFilter);
+function tune(dir){
+  const L=rList();if(!L.length)return;let pos=L.indexOf(rIdx);
+  if(dir==='rand'){let n;do{n=L[Math.floor(Math.random()*L.length)]}while(L.length>1&&n===rIdx);rIdx=n}else{pos=pos<0?0:(pos+dir+L.length)%L.length;rIdx=L[pos]}
+  const q=Q[rIdx],scr=$('#screen');scr.classList.remove('static');void scr.offsetWidth;scr.classList.add('static');sfx.squelch();
+  $('#freq').innerHTML=(118+((rIdx*1.375)%18)).toFixed(3)+'<small>MHz</small>';
+  setTimeout(()=>{$('#quote').textContent='« '+q[3]+' »';$('#quoteMeta').innerHTML=`<b>${q[0]==='R'?'ROMÉO':'NELL'}</b> · ${q[1]} · ${q[2]}`},reduce?0:160);
+  $('#qCount').textContent=(L.indexOf(rIdx)+1)+' / '+L.length;
+}
+$('#kPrev').addEventListener('click',()=>tune(-1));$('#kNext').addEventListener('click',()=>tune(1));$('#kRand').addEventListener('click',()=>tune('rand'));
+$$('#radioFilter button').forEach(b=>b.addEventListener('click',()=>{$$('#radioFilter button').forEach(x=>x.setAttribute('aria-pressed',x===b));rFilter=b.dataset.w;rIdx=-1;tune(1)}));
+tune(1);
+
+/* ================= LEXICON ================= */
+const LEX=[
+['Night dating','nom, inventé le 12.09','Sunset, puis vol de nuit, puis un verre. Testé le 29.09. Validé avec sushis.'],
+['Ptit cœur','surnom préféré','« Mais le préféré c’est ptit cœur » (12.10). 29 fois dans nos messages, dans les deux sens.'],
+['Câlins magiques','nom pluriel, 21.10','Les miens, d’après toi. Réclamés le soir, par message. Livraison en personne uniquement.'],
+['M’emballer','verbe','Ce que font mes bras, d’après toi. « J’aime trop quand tu m’emballes dans tes bras » (15.10).'],
+['Bon aller :-)','interj., 47 fois','Ton annonce officielle que tu vas dormir. Généralement suivie de dix messages.'],
+['Je t’aime fort 💪🏻','formule','Ta signature, avec le biceps. Jamais sans le biceps.'],
+['Papouilles','nom pluriel','Sur la main, sur la jambe, dans le cou. Suivies de « ptit filou ».'],
+['Papillons','nom pluriel, 14 fois','D’abord dans le ventre (19.09), puis « dans tout mon corps en un coup » (01.10).'],
+['Too shy','expr. anglaise','« Non non j’ai pas oublié, too shy » : toi qui n’oses pas encore le bisou. Ça viendra.'],
+['Spot on','expr. du grand P','« Pour un premier amoureux, c’est spot on » (10.10). Je l’encadre à côté de l’élégance et de la délicatesse.'],
+['Dashcam','nom','Témoin officiel du premier vrai bisou. « Vrai bisou ? » « Oui. »'],
+['Le grand P','nom propre','Ton papa. Pose régulièrement la question « est-ce qu’il y a eu un bisou ? ». Cité 153 fois par toi.'],
+['Absolute Butter','expr.','Atterrissage si doux qu’on pourrait le tartiner. Inventé pour tes T&G du 20.06.'],
+['Plans Z','nom pluriel','Ce qu’il faut quand tous les plans B ont été annulés par NOTAM.'],
+['Mike Oscar Roméo Tango','expr. OTAN','M-O-R-T. Ma réaction en apprenant que ton papa voulait me voir.'],
+['Doudou','membre d’équipage','Décapité mais vaillant. « Ça rajoute 50 grammes. » A volé pour la première fois le 04.10.'],
+['Hihi','interj.','Ton mot préféré. 417 fois dans la conversation, dont 308 de toi.'],
+['Hervé','nom propre','L’instructeur qui se proposait comme « remplaçant ». N’a qu’à bien se tenir (22.10).'],
+['Bisou','nom','« Pas dans mes skills les plus maîtrisés » (07.10). Entraînement intensif en cours. Résultats : excellents.'],
+['Papataxi','nom','Ton chauffeur officiel en attendant le permis. Voir aussi : Rorotaxi, service premium, portes ouvertes incluses.'],
+['Jus de chaussettes','nom','Le café de la CAG, d’après toi. D’où l’intérêt du pilot lounge.'],
+['Porte-bonheur','nom','Toi. Voir aussi : porte-clé (que je n’ai perdu que deux fois).'],
+['Karting','nom','Ta lubie. Proposé au moins 8 fois. Il va falloir y aller.'],
+['Calculé','adj.','Mon bisou du 29.09, loin des caméras de chez toi.']
+];
+
+/* ================= NICKNAMES ================= */
+const NK=[
+['Ptit cœur','b',29,'27.09','« Mais le préféré c’est ptit cœur » · Nell, 12.10'],
+['Mon chou','n',37,'05.10','« Bonne nuit mon chou 🥰🥰🫶🏼💕❤️😍 » · Nell, 05.10'],
+['Princesse','b',20,'21.09','« Non dimanche 4 c’est toi la princesse, tu laisses ton portefeuille chez toi 🤣 » · Nell, 22.09'],
+['Mon chou d’amour','n',12,'12.10','« Prudence mon chou d’amour ❤️❤️🥰 » · Nell, 12.10'],
+['Choupette','r',7,'08.10','« Ton « Choupette ❤️ » est ultra chouuu » · Nell, 12.10'],
+['Beau gosse','n',5,'24.09','« un beau gosse qui est le mec le plus parfait de la terre » · Nell, 10.10'],
+['Mon chéri','n',6,'11.10','« Je t’aime 🥰🥰❤️ bonne nuit mon chéri 🫶🏼 » · Nell, 22.10'],
+['Prince charmant','n',4,'07.10','« Bonne nuit mon prince charmant 🤭❤️ » · Nell, 07.10'],
+['Pupuce','r',4,'12.10','« Pupuce 🥰 » · Roméo, 12.10'],
+['Chaton','r',3,'05.10','« Mission : détendre mon ptit chaton 🥰 » · Roméo, 05.10'],
+['Louloute','r',2,'21.10','« Ma petite louloute 💖 » · Roméo, 22.10'],
+['Petit ange aux cheveux d’or','r',1,'19.10','« Joyeux anniversaire mon petit ange aux cheveux d’or ! ✨ » · Roméo, 19.10, 06:37'],
+['Nougatine','r',1,'27.10','« Je t’adore ma petite nougatine 🥰 » « Oula 😂 » « Chocolatine 😂 » · 27.10'],
+['Ptit filou','n',2,'23.10','« Des papouilles ! Dans le cou 🤪 » « Ouiii 🥰 Ptit filou » · 23.10']
+];
+const nkWho={r:'Roméo → Nell',n:'Nell → Roméo',b:'Dans les deux sens'};
+$('#nicks').innerHTML=NK.map(([t,w,c],i)=>`<button class="nick ${w}" data-i="${i}" style="--s:${(0.9+Math.sqrt(c)*0.16).toFixed(2)}rem;--r:${((i*37)%9-4)}deg">${t}</button>`).join('');
+function showNick(i){const [t,w,c,d,q]=NK[i];$$('#nicks .nick').forEach(b=>b.setAttribute('aria-pressed',b.dataset.i==i));
+  $('#nickInfo').innerHTML=`<strong>${t}</strong><span class="mono">${nkWho[w]} · ${c} fois · depuis le ${d}</span><p>${q}</p>`;}
+$$('#nicks .nick').forEach(b=>b.addEventListener('click',()=>{showNick(+b.dataset.i);sfx.pop();const [x,y]=centerOf(b);hearts(x,y,6,['💗','💕','💖'])}));
+showNick(0);
+
+/* ================= HUGS ================= */
+const HUGMS=[[1,'« Je te serre fort dans mes bras » 🙈💞'],[5,'« Portion supplémentaire de câlins svp »'],[10,'« Nos câlins sont trop courts, jamais assez longs à mon goût »'],[25,'« Arrrh purée je me remets pas de tes câlins »'],[50,'« Tu veux pas venir me faire tes petits câlins magiques ? »'],[100,'« J’aime trop quand tu m’emballes dans tes bras »'],[250,'« Juste tout simple dans tes bras »'],[500,'« Je t’aurais bien gardé avec moi pour te serrer dans mes bras toute la nuit »'],[1000,'Mille. Et ce n’est que le début.'],[5000,'À mi-chemin. On ne lâche rien.'],[10000,'10 000. Objectif atteint. On recommence ?']];
+let hugN=store.get('nr_hugs',0);const hugBtn=$('#hugBtn');
+function hugRender(){$('#hugN').textContent=fmt(hugN);$('#hugBar').style.width=Math.min(100,hugN/100)+'%';let m='Premier câlin ?';for(const [k,t] of HUGMS)if(hugN>=k)m=t;$('#hugMsg').textContent=m}
+function hug(n){const before=hugN;hugN+=n;store.set('nr_hugs',hugN);hugRender();hugBtn.classList.remove('squeeze');void hugBtn.offsetWidth;hugBtn.classList.add('squeeze');const [x,y]=centerOf(hugBtn);hearts(x,y,n>1?22:7,['🫂','💗','🥰','💞','🧸']);n>1?sfx.chime():sfx.pop();if(HUGMS.some(([k])=>before<k&&hugN>=k)&&n===1)sfx.ok()}
+let hugT=null,hugLong=false;
+hugBtn.addEventListener('pointerdown',e=>{e.preventDefault();hugLong=false;hugBtn.classList.add('hold');hugT=setTimeout(()=>{hugLong=true;hugBtn.classList.remove('hold');hug(10);if(!reduce)rain(['🫂','💗','🧸'],18)},650)});
+const hugUp=()=>{clearTimeout(hugT);hugBtn.classList.remove('hold');if(hugT&&!hugLong)hug(1);hugT=null};
+hugBtn.addEventListener('pointerup',hugUp);hugBtn.addEventListener('pointerleave',()=>{clearTimeout(hugT);hugBtn.classList.remove('hold');hugT=null});
+hugBtn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();hug(1)}});
+hugBtn.addEventListener('contextmenu',e=>e.preventDefault());
+hugRender();
+
+/* ================= FINAL KISSES ================= */
+$('#gnBtn').addEventListener('click',()=>{
+  $('#gnMsg').innerHTML='Tous les bisous du monde 😘<br>Et je t’aime fort 💪🏻<small>(oui, je te la vole encore)</small>';
+  rain(['💋','😘','💗','🥰','❤️','🧸'],46);sfx.chime();
+});
+
+/* ================= FLOATING HEARTS ================= */
+if(!reduce){const fl=document.createElement('div');fl.className='bgh-wrap';fl.setAttribute('aria-hidden','true');
+  for(let i=0;i<16;i++){const h=document.createElement('span');h.className='bgh';h.textContent=['💗','💕','🤍','💖','✈️'][i%5];h.style.left=(Math.random()*100)+'vw';h.style.setProperty('--s',(12+Math.random()*16)+'px');h.style.setProperty('--d',(14+Math.random()*16)+'s');h.style.setProperty('--dl',(-Math.random()*30)+'s');h.style.setProperty('--x',(Math.random()*80-40)+'px');fl.appendChild(h)}
+  document.body.appendChild(fl);
+  addEventListener('pointerdown',e=>{if(e.target.closest('button,a,input,textarea,canvas,label,select,.game-wrap,.map-wrap,.photos,.lightbox'))return;hearts(e.clientX,e.clientY,3,['💗','💕','💖'])},{passive:true});
+}
+
+$('#lex').innerHTML=LEX.map(([a,b,c])=>`<button class="lcard" aria-label="${a} : retourner la carte"><span class="in"><span class="face fr"><small>${b}</small><strong>${a}</strong></span><span class="face bk">${c}</span></span></button>`).join('');
+$$('#lex .lcard').forEach(c=>c.addEventListener('click',()=>{c.classList.toggle('flip');sfx.pop()}));
+
+/* ================= REASONS ================= */
+const RS=[
+['Tu filmes mes atterrissages à la GoPro.','Et tu m’as dit « super landing » à Charleroi (26.06).'],
+['Tu cherches des destinations sur ChatGPT quand les NOTAMs m’achèvent.','20.06, Opération NOTAMs.'],
+['Tu veux toujours payer le resto.','« La prochaine fois c’est moi qui paye, t’es insupportable » (09.10).'],
+['Tu assumes ton doudou à bord d’un avion.','Doudou, PNC officiel depuis le 04.10.'],
+['Tu m’as dit « le cadeau c’est toi ».','12.09, 18:47.'],
+['Tu étais dans le top 10 % sur 640 candidats, et tu as continué.','29.08.'],
+['Ta PPL a la même date que la mienne.','Un 27 juillet.'],
+['Tu tiens tes promesses.','Texel : « la prochaine fois c’est moi qui t’emmène ». Le Touquet : fait.'],
+['Tu as gardé mes messages dans un album.','17.09 : « J’ai tout gardé ».'],
+['Tu dis « hihi » 308 fois et je trouve ça mignon à chaque fois.','Comptés un par un (enfin, par un script).'],
+['Tu m’as prévenu pour ton papa alors qu’il t’avait dit de ne pas le faire.','16.09. Solidarité d’équipage.'],
+['Tu expliques la boîte manuelle mieux que ton moniteur.','12.10, il était choqué.'],
+['Tu fais l’ATPL en travaillant à la BAS.','Et tu trouves encore le temps de me répondre 16 541 fois.'],
+['Tu as 0 patience quand tu as hâte de voir quelqu’un.','12.09 : « Ou de voir quelqu’un ».'],
+['Tu dis que je suis ta source d’énergie.','13.10. C’est réciproque.'],
+['Tu m’appelles « mon chou » 37 fois, et « mon chou d’amour » 12 fois.','Je compte. Évidemment.'],
+['Ton surnom préféré, c’est « ptit cœur ».','12.10. Noté, appliqué, à vie.'],
+['Tu m’as fait le cadeau de ton premier bisou.','30.09. Je le garde en première page du carnet.'],
+['Tu préfères les câlins aux bisous, et tu le dis.','06.10 : « Je suis plus câlins que bisous ».'],
+['Tu trouves nos câlins toujours trop courts.','15.10 : « jamais assez longs à mon goût ». Pareil pour moi.'],
+['Tu as des papillons dans tout le corps, pas que dans le ventre.','01.10. Moi aussi.'],
+['Tu me souhaites de rêver qu’on plane ensemble au-dessus des nuages.','14.10, 22:41.'],
+['Tu as mis mes fleurs en fond d’écran.','Et tu travailles avec le bouquet à côté de toi (13.10).'],
+['Tu dis « bon aller :-) » avant de dormir, puis tu m’écris encore dix messages.','47 « bon aller ». Je les ai tous lus.'],
+['Tu signes « je t’aime fort 💪🏻 ».','Avec le biceps. Toujours.'],
+['Tu t’imagines te réveiller dans mes bras.','24.10, 08:48.'],
+['Tu me dis que je suis le mec parfait, alors que c’est toi.','21.10 : je t’ai répondu la même phrase, au féminin.'],
+['Tu as les yeux pétillants.','Constat du 09.10.'],
+['Tu as répondu « Mais moi aussi » en zéro seconde.','30.09, 00:57.'],
+['Tu as peur des films d’horreur mais tu viens quand même.','Parce que « tu seras là ».'],
+['Tu es la première et seule personne à avoir mangé dans ma voiture.','Statut officiel depuis le 30.09.'],
+['Tu me fais oublier les avions. Même au spotting.','29.10. Les autres l’ont remarqué.'],
+['Tu proposes des plans pour nous deux.','Musée des illusions, Waterloo, bowling, spa, karting (surtout karting).'],
+['Tu me dis « je me sens bien avec toi ».','Et je te crois.'],
+['Tu as fait de ton vœu sur une étoile filante : rester toute ta vie avec moi.','17.10, 21:07.'],
+['Tu es fière de moi avant même que je réussisse.','09.10 : « Moi je crois en toi, et je suis fière de toi ».'],
+['Ta famille me trouve « de l’élégance et de la délicatesse ».','Je l’encadre.'],
+['Tu dis que le temps passe trop vite avec moi.','20.10. Je confirme.'],
+['Tu hurles quand tu vois une mygale.','Et tu me le racontes tout de suite. J’adore.'],
+['Tu ris tout le temps.','14 255 😂. Je n’invente rien.'],
+['Tu es toi.','Pas besoin de source pour celle-là.']
+];
+let ri=0;
+function showR(){$('#rnum').textContent='Raison '+(ri+1)+' / '+RS.length;$('#rtext').textContent=RS[ri][0];$('#rsrc').textContent=RS[ri][1];const c=$('#rcard');c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop')}
+$('#rNext').addEventListener('click',()=>{ri=(ri+1)%RS.length;showR();sfx.pop();if(ri===RS.length-1){const [x,y]=centerOf($('#rcard'));hearts(x,y,14)}});
+$('#rPrev').addEventListener('click',()=>{ri=(ri-1+RS.length)%RS.length;showR()});
+$('#rShuffle').addEventListener('click',()=>{let n;do{n=Math.floor(Math.random()*RS.length)}while(n===ri);ri=n;showR();sfx.pop()});
+showR();
+
+/* ================= BUCKET ================= */
+const BK=[
+['spa','Une soirée spa','promise le 11.10'],['kart','Un karting','tu me le réclames depuis le 11.10'],['drive','Un drive-in avec un film d’amour','avant la Saint-Valentin'],['stars','Regarder les étoiles le soir','« la prochaine fois » (26.10)'],
+['roof','Les rooftops au printemps','24.10'],['shop','Faire les magasins à deux','05.10'],['plane','Manger quelque part en avion','13.10'],['kob','Koblenz, juste pour un dessert','depuis le 20.06'],
+['spey','Speyer et son musée de l’aviation','25.06'],['corse','La Corse','plusieurs jours, plans B inclus'],['simu','Une session simu de 2h30 avec moi','11.10'],['car','Tu viens me chercher en voiture','« non négociable » (13.10)'],
+['wknd','Notre premier week-end','à booker (22.10)'],['illu','Le musée des illusions à Tour & Taxis','ton idée du 23.10'],['texel2','Retourner à Texel, en hiver, bien habillés','après le night dating'],['racl','Une raclette, pour avoir chaud','11.09']
+];
+let bState=store.get('nr_bucket',{}),bCustom=store.get('nr_bucket_custom',[]);
+function renderBucket(){
+  const all=BK.concat(bCustom.map((t,i)=>['c'+i,t,'ajouté par toi']));
+  $('#bucket').innerHTML=all.map(([id,t,s])=>`<li><label><input type="checkbox" id="bk-${id}" data-id="${id}" ${bState[id]?'checked':''}><span>${t.replace(/</g,'&lt;')}<small>${s}</small></span></label></li>`).join('');
+  $$('#bucket input').forEach(i=>i.addEventListener('change',()=>{bState[i.dataset.id]=i.checked;store.set('nr_bucket',bState);if(i.checked){sfx.ok();const [x,y]=centerOf(i);hearts(x,y,8)}}));
+}
+$('#bucketAdd').addEventListener('click',()=>{const v=$('#bucketIn').value.trim();if(!v)return;bCustom.push(v.slice(0,80));store.set('nr_bucket_custom',bCustom);$('#bucketIn').value='';renderBucket();sfx.pop()});
+$('#bucketIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#bucketAdd').click()}});
+renderBucket();
+
+/* ================= QUIZ ================= */
+const QZ=[
+{q:'Où s’est passé notre tout premier vol ensemble ?',o:['Colmar','Texel','Koblenz','Aschaffenburg'],a:1,ok:'Texel. 40 °C au sol et la crème solaire en option.',ko:'Raté. Colmar, c’était pas de fuel sans carte AirBP 🙄'},
+{q:'Qu’est-ce qui manquait pour faire le plein à Colmar le 20.06 ?',o:['Une carte AirBP','Un pompiste','Du courage','Un NOTAM'],a:0,ok:'Une carte AirBP. On s’en souviendra.',ko:'Non : une carte AirBP. Le premier de nos nombreux NOTAMs.'},
+{q:'Qu’est-ce qu’on a mangé à 4000 ft pendant le night dating ?',o:['Des sushis','Une raclette','Des chips Ryanair','Rien, trop stressés'],a:0,ok:'Des sushis. Le seul resto avec vue sur toute la Belgique.',ko:'Des sushis ! La raclette c’est pour avoir chaud, autre histoire.'},
+{q:'Quelle question ton papa t’a-t-il posée au moins trois fois ?',o:['« Il a combien d’heures de vol ? »','« Il a fait le plein ? »','« Est-ce qu’il y a eu un bisou ? »','« Il a son IR ? »'],a:2,ok:'Le grand P veut des updates. Toujours.',ko:'Non, lui il veut savoir s’il y a eu bisou. Trois fois.'},
+{q:'Qui a écrit « Je crois que je t’aime » en premier, à 00h57 ?',o:['Nell','La tour de Charleroi','Roméo','Le doudou'],a:2,ok:'Moi. Et tu as répondu dans la même minute : « Ooooh ! Mais moi aussi ».',ko:'C’était moi ! Le 30 septembre à 00h57.'},
+{q:'Qui était le passager clandestin du vol vers Le Touquet ?',o:['Ton papa','Le doudou','Un gars de la promo','Personne'],a:1,ok:'Le doudou, sur le tableau de bord. Une destination de plus dans sa vie.',ko:'Le doudou ! Posé sur le tableau de bord.'},
+{q:'Quel est ton surnom préféré (d’après toi, le 12.10) ?',o:['Choupette','Ptit cœur','Pupuce','Nougatine'],a:1,ok:'Ptit cœur. 29 fois dans nos messages.',ko:'C’est « ptit cœur » ! « Mais le préféré c’est ptit cœur ».'},
+{q:'Avec quel avion tu m’as emmené au Touquet ?',o:['DA40','PA28','PC-12','A320'],a:1,ok:'Le PA28. Et tu as géré GPS et pilote automatique.',ko:'Un PA28. Le DA40, c’était Texel et le night dating.'},
+{q:'Selon le grand P (10.10), pour un premier amoureux, je suis… ?',o:['« Pas mal »','« Spot on »','« Trop grand »','« À surveiller »'],a:1,ok:'« Spot on ». Je l’encadre.',ko:'« Franchement pour un premier amoureux, c’est spot on ».'},
+{q:'Combien de messages on s’est envoyés depuis le 20 juin ?',o:['Environ 3 000','Environ 12 000','33 808','1 million (presque)'],a:2,ok:'33 808. Et 21 670 émojis qui pleurent de rire.',ko:'Plus que ça : 33 808. Oui, on est comme ça.'},
+{q:'Quel mot tu as écrit 308 fois ?',o:['« Hein »','« Hihi »','« Bisou »','« Papa »'],a:1,ok:'« Hihi ». (« Hein » aussi, 578 fois, mais chut.)',ko:'« Hihi ». 308 fois. Avec amour.'},
+{q:'Qu’ont dit tes parents de moi le 10.10 ?',o:['« Il conduit bien »','« Beaucoup d’élégance et de délicatesse »','« Il parle trop d’avions »','« Il est un peu grand »'],a:1,ok:'« Beaucoup d’élégance et de délicatesse ». Je l’encadre.',ko:'« Beaucoup d’élégance et de délicatesse ». Si si.'},
+{q:'Tu es plutôt… ?',o:['Bisous','Câlins','Poignée de main','Tape dans le dos'],a:1,ok:'« Je suis plus câlins que bisous » (06.10). Câlins magiques, surtout.',ko:'Câlins ! « Je suis plus câlins que bisous » (06.10).'},
+{q:'Quelle activité tu me réclames sans arrêt ?',o:['Le parachute','Le karting','Le golf','La pêche'],a:1,ok:'Le karting. Le bon est dans le hangar à jeux.',ko:'Le karting ! Au moins 8 fois.'}
+];
+let qi=0,score=0;const qbox=$('#quiz'),qbar=$('#qBar');
+function renderQ(){
+  qbar.style.width=(qi/QZ.length*100)+'%';
+  if(qi>=QZ.length){
+    const msg=score===QZ.length?'Sans faute. Licence délivrée, valable à vie.':score>=9?'Réussi avec mention. Licence délivrée.':score>=6?'Réussi ! Licence délivrée (on révisera ensemble, ça me va).':'Retake obligatoire… avec moi comme instructeur 😏';
+    qbox.innerHTML=`<div class="licence"><div class="seal">${score}/${QZ.length}</div><div><p class="eyebrow" style="margin:0">Licence NR · Nous-deux-ologie</p><p style="font-weight:800;font-size:1.1rem">${msg}</p></div></div><button class="btn ghost" id="qAgain" style="margin-top:14px">Repasser l’examen</button>`;
+    $('#qAgain').onclick=()=>{qi=0;score=0;renderQ()};if(score>=6){sfx.chime();const [x,y]=centerOf(qbox);hearts(x,y,18)}return;
+  }
+  const it=QZ[qi];
+  qbox.innerHTML=`<div class="q-count">QUESTION ${qi+1} / ${QZ.length} · score ${score}</div><h3>${it.q}</h3><div class="opts">${it.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}</div><p class="fb" aria-live="polite"></p>`;
+  $$('.opt',qbox).forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i,good=i===it.a;if(good)score++;good?sfx.ok():sfx.ko();
+    $$('.opt',qbox).forEach((x,j)=>{x.disabled=true;if(j===it.a)x.classList.add('ok')});if(!good)b.classList.add('ko');
+    $('.fb',qbox).textContent=(good?'✓ ':'✗ ')+(good?it.ok:it.ko);
+    const nx=document.createElement('button');nx.className='btn';nx.style.marginTop='12px';nx.textContent=qi===QZ.length-1?'Voir le résultat':'Question suivante';nx.onclick=()=>{qi++;renderQ()};qbox.appendChild(nx);nx.focus({preventScroll:true});
+  });
+}
+renderQ();
+
+/* ================= CLEARANCE ================= */
+const no=$('#no'),yes=$('#yes'),ans=$('#answer');
+const noLabels=['Négatif','Sûre ?','Vraiment ?','Unable… to say no','Le grand P dit oui','Readback incorrect','Fréquence brouillée','Bien essayé 😏'];
+let nc=0;
+function flee(e){if(e&&e.cancelable)e.preventDefault();nc++;no.textContent=noLabels[nc%noLabels.length];const aw=ans.clientWidth-no.offsetWidth,ah=ans.clientHeight-no.offsetHeight;no.style.position='absolute';no.style.left=Math.max(0,Math.random()*aw)+'px';no.style.top=Math.max(0,50+Math.random()*Math.max(0,ah-50))+'px';sfx.pop()}
+no.addEventListener('pointerenter',flee);no.addEventListener('pointerdown',flee);no.addEventListener('click',flee);
+yes.addEventListener('click',()=>{
+  const [x,y]=centerOf(yes);hearts(x,y,40);sfx.chime();setTimeout(()=>rain(['❤️','🥰','✈️','🧸','💞'],40),reduce?0:400);
+  yes.textContent='Clairance acceptée ❤️ Bienvenue à bord pour toujours';no.hidden=true;
+  $('#letter').classList.add('show');$('#reply').classList.add('show');
+  setTimeout(()=>$('#letter').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}),300);
+});
+$('#copyReply').addEventListener('click',()=>{
+  const ta=$('#replyTxt'),txt=ta.value.trim()||'Readback : autorisée, pour toujours ❤️';
+  const done=m=>{$('#copyMsg').textContent=m};
+  try{navigator.clipboard.writeText(txt).then(()=>done('Copié. Colle-le dans WhatsApp 💬'),()=>{ta.select();done('Sélectionné : copie-le puis colle-le dans WhatsApp.')})}catch(e){ta.select();done('Sélectionné : copie-le puis colle-le dans WhatsApp.')}
+});
+
+/* ================= EASTER EGGS ================= */
+let dTaps=[];
+$('#doudouBtn').addEventListener('click',()=>{const t=Date.now();dTaps=dTaps.filter(x=>t-x<2500);dTaps.push(t);sfx.pop();if(dTaps.length>=5){dTaps=[];rain(['🧸'],36);sfx.chime()}});
+let kb='';
+addEventListener('keydown',e=>{const tag=(document.activeElement&&document.activeElement.tagName)||'';if(/INPUT|TEXTAREA/.test(tag))return;if(e.key&&e.key.length===1){kb=(kb+e.key.toLowerCase()).slice(-5);if(kb==='bisou'){rain(['💋','❤️','🥰'],40);sfx.chime();kb=''}}});
+let gpShown=false;
+const kiss=$('#kiss');
+if(kiss){const o=new IntersectionObserver(es=>{if(es[0].isIntersecting&&!gpShown){gpShown=true;o.disconnect();setTimeout(grandP,1200)}},{threshold:.35});o.observe(kiss)}
+function grandP(){
+  const t=document.createElement('div');t.className='toast';t.setAttribute('role','status');
+  t.innerHTML=`<div class="who">📞 Appel entrant · le grand P</div><p>« Est-ce qu’il y a eu un bisou ? »</p><div class="row-btns"><button class="btn small" data-a="1">Non papa 🙄</button><button class="btn small ghost" data-a="2">Mike Oscar Roméo Tango</button></div>`;
+  document.body.appendChild(t);sfx.squelch();
+  $$('button',t).forEach(b=>b.addEventListener('click',()=>{$('p',t).textContent=b.dataset.a==='1'?'« Hmm. Je repose la question demain. »':'« … Je vois. »';$('.row-btns',t).remove();setTimeout(()=>t.remove(),2200)}));
+  setTimeout(()=>{if(t.isConnected)t.remove()},16000);
+}
+})();
+
+</script>
+</body>
+</html>
